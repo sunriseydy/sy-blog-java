@@ -1,7 +1,6 @@
 package dev.sunriseydy.wp.common.properties;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
@@ -12,8 +11,7 @@ import org.springframework.validation.annotation.Validated;
  */
 @ConfigurationProperties(prefix = "sy.wp")
 @Validated
-@Getter
-@Setter
+@Data
 public class SyWpProperties {
 
     /**
@@ -32,7 +30,7 @@ public class SyWpProperties {
      *     api:通过 wordpress rest api
      * </li>
      * <li>
-     *     db:通过 wordpress datebase
+     *     db:通过 wordpress database
      * </li>
      * <p>
      *     默认是 api

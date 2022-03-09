@@ -41,8 +41,8 @@ server:
 
 sy:
   wp:
-    source-type: api
-    rest-api-host: https://blog.sunriseydy.top/wp-json
+    source-type: ${WP_SOURCE_TYPE:api}
+    rest-api-host: ${WP_REST_API_HOST:https://blog.sunriseydy.top/}
 
 logging:
   level:
