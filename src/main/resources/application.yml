@@ -38,6 +38,12 @@ server:
     direct-buffers: true
     # HTTP POST请求最大的大小。默认0，无限制，可设置10M
     max-http-post-size: 0
+
+sy:
+  wp:
+    source-type: api
+    rest-api-host: https://blog.sunriseydy.top/wp-json
+
 logging:
   level:
     dev.sunriseydy.wp: debug
