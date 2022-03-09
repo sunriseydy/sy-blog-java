@@ -30,7 +30,7 @@ public class SyWpProperties {
     private String sourceType = WpSourceTypeConstant.SOURCE_TYPE_API;
 
     /**
-     * resp
+     * rest api host, see <a href="https://developer.wordpress.org/rest-api/">WordPress REST API Handbook</a>
      */
     @URL
     private String restApiHost;
