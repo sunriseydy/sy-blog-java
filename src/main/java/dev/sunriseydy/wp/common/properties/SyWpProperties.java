@@ -1,5 +1,6 @@
 package dev.sunriseydy.wp.common.properties;
 
+import dev.sunriseydy.wp.common.constants.WpSourceTypeConstant;
 import lombok.Data;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -15,28 +16,18 @@ import org.springframework.validation.annotation.Validated;
 public class SyWpProperties {
 
     /**
-     * 数据来源类型 - api
-     */
-    public static final String SOURCE_TYPE_API = "api";
-
-    /**
-     * 数据来源类型 - db
-     */
-    public static final String SOURCE_TYPE_DB = "db";
-
-    /**
      * 数据来源类型
      * <li>
-     *     api:通过 wordpress rest api
+     *     api:通过 wordpress rest api,{@link dev.sunriseydy.wp.common.constants.WpSourceTypeConstant#SOURCE_TYPE_API}
      * </li>
      * <li>
-     *     db:通过 wordpress database
+     *     db:通过 wordpress database,{@link dev.sunriseydy.wp.common.constants.WpSourceTypeConstant#SOURCE_TYPE_DB}
      * </li>
      * <p>
      *     默认是 api
      * </p>
      */
-    private String sourceType = SOURCE_TYPE_API;
+    private String sourceType = WpSourceTypeConstant.SOURCE_TYPE_API;
 
     /**
      * resp
