@@ -26,7 +26,7 @@ public class WpApiGlobalRequestParamVO {
      *     例如：/wp/v2/posts?_fields=author,id,excerpt,title,link
      * </p>
      */
-    @WpApiRequestParam("_fields")
+    @WpApiRequestParam(paramName = "_fields")
     private String fields;
 
     /**
@@ -37,7 +37,7 @@ public class WpApiGlobalRequestParamVO {
      *     例如：/wp/v2/posts?_fields[]=author&_fields[]=id&_fields[]=excerpt&_fields[]=title&_fields[]=link
      * </p>
      */
-    @WpApiRequestParam("_fields[]")
+    @WpApiRequestParam(paramName = "_fields[]")
     private List<String> fieldsList;
 
     /**
@@ -48,7 +48,7 @@ public class WpApiGlobalRequestParamVO {
      *     例如 /wp/v2/posts?_embed=author,wp:term
      * </p>
      */
-    @WpApiRequestParam("_embed")
+    @WpApiRequestParam(paramName = "_embed")
     private String embed;
 
     /**
@@ -59,7 +59,7 @@ public class WpApiGlobalRequestParamVO {
      *     例如：A POST to /wp-json/wp/v2/posts/42?_method=DELETE would be translated to a DELETE to the wp/v2/posts/42 route.
      * </p>
      */
-    @WpApiRequestParam("_method")
+    @WpApiRequestParam(paramName = "_method")
     private String method;
 
     /**
@@ -67,7 +67,6 @@ public class WpApiGlobalRequestParamVO {
      *     告诉 wordpress 将响应的 header 和 status code 都放到 body 中
      * </p>
      */
-    @WpApiRequestParam("envelope")
     private Boolean envelope = Boolean.TRUE;
 
 }

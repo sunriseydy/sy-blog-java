@@ -1,5 +1,6 @@
 package dev.sunriseydy.wp.common.vo;
 
+import dev.sunriseydy.wp.common.annotion.WpApiRequestParam;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,6 +30,7 @@ public class WpApiPaginationVO {
     /**
      * 每页个数,最大100
      */
+    @WpApiRequestParam(paramName = "per_page")
     private Integer perPage;
 
     /**

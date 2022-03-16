@@ -1,8 +1,8 @@
 package dev.sunriseydy.wp.common.annotion;
 
-import org.springframework.core.annotation.AliasFor;
-
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
@@ -10,16 +10,13 @@ import java.lang.annotation.Target;
  * @author SunriseYDY
  * @date 2022-03-10 15:47
  */
+@Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface WpApiRequestParam {
     /**
      * 指定参数名，为空则取当前字段名
      * @return
      */
-    @AliasFor("paramName")
-    String value() default "";
-
-    @AliasFor("value")
     String paramName() default "";
 
     /**
