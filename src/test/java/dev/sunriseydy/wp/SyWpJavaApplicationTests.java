@@ -1,13 +1,17 @@
 package dev.sunriseydy.wp;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.sunriseydy.wp.common.properties.SyWpProperties;
 import dev.sunriseydy.wp.common.utils.WpApiRequestUtil;
+import dev.sunriseydy.wp.common.utils.WpApiResponseUtil;
 import dev.sunriseydy.wp.common.vo.WpApiGlobalRequestParamVO;
 import dev.sunriseydy.wp.common.vo.WpApiPaginationVO;
 import dev.sunriseydy.wp.post.domain.entity.Post;
+import dev.sunriseydy.wp.post.domain.repository.PostRepository;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 @SpringBootTest
+@Slf4j
 class SyWpJavaApplicationTests {
 
     @Autowired
@@ -25,6 +30,9 @@ class SyWpJavaApplicationTests {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private PostRepository postRepository;
 
     @Test
     void contextLoads() {
@@ -66,5 +74,22 @@ class SyWpJavaApplicationTests {
                     .fieldsList(Arrays.asList("id", "author"))
                 .build());
         System.out.println(queryParma);
+    }
+
+    @SneakyThrows
+    @Test
+    void testResponseOne() {
+        JsonNode jsonNode = objectMapper.readTree(new File("/home/sunriseydy/Desktop/temp/correct.json"));
+        JsonNode body = jsonNode.get(WpApiResponseUtil.RESPONSE_BODY);
+        List<Post> posts = objectMapper.readValue(body.traverse(), new TypeReference<List<Post>>() {
+        });
+        System.out.println(posts.get(0));
+    }
+
+    @SneakyThrows
+    @Test
+    void testGetPostIdList() {
+        List<Post> posts = postRepository.getPostIdList();
+        log.debug("posts:{}", objectMapper.writeValueAsString(posts));
     }
 }

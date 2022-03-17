@@ -67,6 +67,7 @@ public class WpApiGlobalRequestParamVO {
      *     告诉 wordpress 将响应的 header 和 status code 都放到 body 中
      * </p>
      */
+    @WpApiRequestParam(paramName = "_envelope")
     private Boolean envelope = Boolean.TRUE;
 
 }
