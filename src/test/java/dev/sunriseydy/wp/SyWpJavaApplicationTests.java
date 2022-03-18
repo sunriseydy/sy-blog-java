@@ -8,8 +8,9 @@ import dev.sunriseydy.wp.common.utils.WpApiRequestUtil;
 import dev.sunriseydy.wp.common.utils.WpApiResponseUtil;
 import dev.sunriseydy.wp.common.vo.WpApiGlobalRequestParamVO;
 import dev.sunriseydy.wp.common.vo.WpApiPaginationVO;
-import dev.sunriseydy.wp.post.domain.entity.Post;
+import dev.sunriseydy.wp.post.api.dto.PostDTO;
 import dev.sunriseydy.wp.post.domain.repository.PostRepository;
+import dev.sunriseydy.wp.post.domain.vo.WpApiPostVO;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -47,17 +48,17 @@ class SyWpJavaApplicationTests {
     @SneakyThrows
     @Test
     void testPostJson() {
-        Post post = Post.builder().date(new Date()).build();
+        WpApiPostVO post = WpApiPostVO.builder().date(new Date()).build();
         String json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(post);
         System.out.println(json);
-        Post readValue = objectMapper.readValue(json, Post.class);
+        WpApiPostVO readValue = objectMapper.readValue(json, WpApiPostVO.class);
         System.out.println(readValue);
     }
 
     @SneakyThrows
     @Test
     void testReadPost() {
-        List<Post> readValue = objectMapper.readValue(new File("/home/sunriseydy/Desktop/temp/acgn-post.json"), new TypeReference<List<Post>>() {
+        List<WpApiPostVO> readValue = objectMapper.readValue(new File("/home/sunriseydy/Desktop/temp/acgn-post.json"), new TypeReference<List<WpApiPostVO>>() {
         });
         System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(readValue.get(0)));
     }
@@ -81,7 +82,7 @@ class SyWpJavaApplicationTests {
     void testResponseOne() {
         JsonNode jsonNode = objectMapper.readTree(new File("/home/sunriseydy/Desktop/temp/correct.json"));
         JsonNode body = jsonNode.get(WpApiResponseUtil.RESPONSE_BODY);
-        List<Post> posts = objectMapper.readValue(body.traverse(), new TypeReference<List<Post>>() {
+        List<WpApiPostVO> posts = objectMapper.readValue(body.traverse(), new TypeReference<List<WpApiPostVO>>() {
         });
         System.out.println(posts.get(0));
     }
@@ -89,7 +90,14 @@ class SyWpJavaApplicationTests {
     @SneakyThrows
     @Test
     void testGetPostIdList() {
-        List<Post> posts = postRepository.getPostIdList();
+        List<PostDTO> posts = postRepository.getPostIdList();
         log.debug("posts:{}", objectMapper.writeValueAsString(posts));
+    }
+
+    @SneakyThrows
+    @Test
+    void testGetPostById() {
+        PostDTO post = postRepository.getPostById(379L);
+        log.debug("post:{}", objectMapper.writeValueAsString(post));
     }
 }

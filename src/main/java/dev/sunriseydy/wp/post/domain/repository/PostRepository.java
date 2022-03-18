@@ -1,6 +1,6 @@
 package dev.sunriseydy.wp.post.domain.repository;
 
-import dev.sunriseydy.wp.post.domain.entity.Post;
+import dev.sunriseydy.wp.post.api.dto.PostDTO;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface PostRepository {
 
-    List<Post> getPostIdList();
+    List<PostDTO> getPostIdList();
 
-    Post getPostById();
+    PostDTO getPostById(Long id);
 }

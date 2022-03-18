@@ -1,6 +1,7 @@
 package dev.sunriseydy.wp.common.utils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.sunriseydy.wp.common.exception.CommonException;
@@ -35,6 +36,7 @@ public class WpApiResponseUtil {
     public void checkResponseIsOk(String response) {
         Assert.hasText(response, "WordPress API 响应为空");
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         JsonNode jsonNode = objectMapper.readTree(response);
         JsonNode status = jsonNode.get(RESPONSE_STATUS);
         if (status == null) {
@@ -45,6 +47,7 @@ public class WpApiResponseUtil {
             log.error("wordpress api 返回失败:{}", response);
             throw new CommonException("wordpress api 返回失败：" + status + ";" + getResponseErrorMessage(response));
         }
+        log.debug("response:{}", response);
     }
 
     public String checkResponseEntityAndReturnBody(ResponseEntity<String> responseEntity) {
@@ -63,6 +66,7 @@ public class WpApiResponseUtil {
     public String getResponseErrorMessage(String response) {
         Assert.hasText(response, "WordPress API 响应为空");
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         JsonNode jsonNode = objectMapper.readTree(response);
         JsonNode body = jsonNode.get(RESPONSE_BODY);
         if (body != null && body.isObject() && body.has(RESPONSE_MESSAGE)) {
@@ -76,6 +80,7 @@ public class WpApiResponseUtil {
     public <T> T getResponseBodyAsObject(String response, Class<T> type) {
         checkResponseIsOk(response);
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         JsonNode jsonNode = objectMapper.readTree(response);
         JsonNode body = jsonNode.get(RESPONSE_BODY);
         return objectMapper.readValue(body.traverse(), type);
@@ -85,6 +90,7 @@ public class WpApiResponseUtil {
     public <T> T getResponseBodyAsObject(String response, TypeReference<T> valueTypeRef) {
         checkResponseIsOk(response);
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         JsonNode jsonNode = objectMapper.readTree(response);
         JsonNode body = jsonNode.get(RESPONSE_BODY);
         return objectMapper.readValue(body.traverse(), valueTypeRef);
@@ -94,6 +100,7 @@ public class WpApiResponseUtil {
     public int getResponseTotal(String response) {
         checkResponseIsOk(response);
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         JsonNode jsonNode = objectMapper.readTree(response);
         JsonNode headers = jsonNode.get(RESPONSE_HEADERS);
         if (headers == null) {
@@ -113,6 +120,7 @@ public class WpApiResponseUtil {
     public int getResponseTotalPages(String response) {
         checkResponseIsOk(response);
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         JsonNode jsonNode = objectMapper.readTree(response);
         JsonNode headers = jsonNode.get(RESPONSE_HEADERS);
         if (headers == null) {

@@ -14,4 +14,6 @@ public interface WpApiConstant {
      * posts api location
      */
     String API_POST = "/wp/v2/posts";
+
+    String API_DETAIL = "/{id}";
 }

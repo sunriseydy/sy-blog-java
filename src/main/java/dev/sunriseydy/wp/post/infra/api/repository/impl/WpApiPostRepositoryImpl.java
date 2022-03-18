@@ -7,7 +7,8 @@ import dev.sunriseydy.wp.common.utils.WpApiRequestUtil;
 import dev.sunriseydy.wp.common.utils.WpApiResponseUtil;
 import dev.sunriseydy.wp.common.vo.WpApiGlobalRequestParamVO;
 import dev.sunriseydy.wp.common.vo.WpApiPaginationVO;
-import dev.sunriseydy.wp.post.domain.entity.Post;
+import dev.sunriseydy.wp.post.api.dto.PostDTO;
+import dev.sunriseydy.wp.post.domain.vo.WpApiPostVO;
 import dev.sunriseydy.wp.post.domain.repository.PostRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -18,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URI;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author SunriseYDY
@@ -31,13 +33,19 @@ public class WpApiPostRepositoryImpl implements PostRepository {
 
     private final RestTemplate restTemplate;
 
+    private final String postApiUri;
+
+    private final String postDetailApiUri;
+
     public WpApiPostRepositoryImpl(SyWpProperties wpProperties, RestTemplateBuilder restTemplateBuilder) {
         this.wpProperties = wpProperties;
         this.restTemplate = restTemplateBuilder.build();
+        this.postApiUri = wpProperties.getRestApiHost() + WpApiConstant.API_PREFIX + WpApiConstant.API_POST;
+        this.postDetailApiUri = this.postApiUri + WpApiConstant.API_DETAIL;
     }
 
     @Override
-    public List<Post> getPostIdList() {
+    public List<PostDTO> getPostIdList() {
         int page = 1;
         int perPage = 10;
         WpApiPaginationVO pagination = WpApiPaginationVO.builder()
@@ -49,8 +57,6 @@ public class WpApiPostRepositoryImpl implements PostRepository {
                 .fieldsList(Collections.singletonList("id"))
                 .build();
 
-        String postApiUri = wpProperties.getRestApiHost() + WpApiConstant.API_PREFIX + WpApiConstant.API_POST;
-
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(URI.create(postApiUri + WpApiRequestUtil.generateQueryParma(pagination, globalRequestParam)), String.class);
 
         String response = WpApiResponseUtil.checkResponseEntityAndReturnBody(responseEntity);
@@ -60,7 +66,7 @@ public class WpApiPostRepositoryImpl implements PostRepository {
         log.info("page:{}, totalPage:{}", page, totalPages);
         log.info("total:{}", total);
 
-        List<Post> posts = WpApiResponseUtil.getResponseBodyAsObject(response, new TypeReference<List<Post>>() {
+        List<WpApiPostVO> posts = WpApiResponseUtil.getResponseBodyAsObject(response, new TypeReference<List<WpApiPostVO>>() {
         });
 
         while (page++ < totalPages) {
@@ -71,14 +77,21 @@ public class WpApiPostRepositoryImpl implements PostRepository {
                     .build();
             responseEntity = restTemplate.getForEntity(URI.create(postApiUri + WpApiRequestUtil.generateQueryParma(pagination, globalRequestParam)), String.class);
             response = WpApiResponseUtil.checkResponseEntityAndReturnBody(responseEntity);
-            posts.addAll(WpApiResponseUtil.getResponseBodyAsObject(response, new TypeReference<List<Post>>() {
+            posts.addAll(WpApiResponseUtil.getResponseBodyAsObject(response, new TypeReference<List<WpApiPostVO>>() {
             }));
         }
-        return posts;
+        return posts.stream().map(WpApiPostVO::toPostDto).collect(Collectors.toList());
     }
 
     @Override
-    public Post getPostById() {
-        return null;
+    public PostDTO getPostById(Long id) {
+        WpApiGlobalRequestParamVO globalRequestParam = WpApiGlobalRequestParamVO.builder()
+                .envelope(Boolean.TRUE)
+                .embed("wp:featuredmedia,wp:term,author")
+                .build();
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity(postDetailApiUri + WpApiRequestUtil.generateQueryParma(globalRequestParam), String.class, id);
+        String response = WpApiResponseUtil.checkResponseEntityAndReturnBody(responseEntity);
+        WpApiPostVO postVO = WpApiResponseUtil.getResponseBodyAsObject(response, WpApiPostVO.class);
+        return postVO.toPostDto();
     }
 }

@@ -20,4 +20,8 @@ public class WpApiRenderedVO {
 
     @JsonProperty("protected")
     private Boolean protect;
+
+    public static String getRenderedString(WpApiRenderedVO renderedVO) {
+        return renderedVO == null ? null : renderedVO.getRendered();
+    }
 }
