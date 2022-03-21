@@ -1,6 +1,8 @@
 package dev.sunriseydy.wp.post.app.service.impl;
 
 import dev.sunriseydy.wp.common.constants.WpCacheConstant;
+import dev.sunriseydy.wp.common.utils.PageUtil;
+import dev.sunriseydy.wp.common.vo.PageVO;
 import dev.sunriseydy.wp.post.api.dto.PostDTO;
 import dev.sunriseydy.wp.post.app.service.PostService;
 import dev.sunriseydy.wp.post.domain.repository.PostRepository;
@@ -43,6 +45,11 @@ public class PostServiceImpl implements PostService {
                 .map(s -> postRepository.getPostById(Long.parseLong(s.replace(prefix, ""))).clearContent())
                 .sorted(Comparator.comparing(PostDTO::getDate).reversed())
                 .collect(Collectors.toList()) : Collections.emptyList();
+    }
+
+    @Override
+    public PageVO<PostDTO> getPostPage(int page, int pageSize) {
+        return PageUtil.doPage(page, pageSize, this.getPostList());
     }
 
     @Override
