@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 /**
  * @author SunriseYDY
@@ -28,11 +27,6 @@ public class PostController {
     @GetMapping("/{id}")
     public Result<PostDTO> getPostById(@NotNull @PathVariable Long id) {
         return Result.ok(postService.getPostById(id));
-    }
-
-    @GetMapping("/list")
-    public Result<List<PostDTO>> getPostList() {
-        return Result.ok(postService.getPostList());
     }
 
     @GetMapping()
