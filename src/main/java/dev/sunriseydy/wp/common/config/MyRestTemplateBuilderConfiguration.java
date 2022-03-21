@@ -13,7 +13,7 @@ import java.time.Duration;
  * @date 2022-03-17 19:43
  */
 @Configuration(proxyBeanMethods = false)
-public class RestTemplateBuilderConfig {
+public class MyRestTemplateBuilderConfiguration {
 
     @Bean
     @Primary

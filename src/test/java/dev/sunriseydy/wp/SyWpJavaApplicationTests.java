@@ -9,6 +9,7 @@ import dev.sunriseydy.wp.common.utils.WpApiResponseUtil;
 import dev.sunriseydy.wp.common.vo.WpApiGlobalRequestParamVO;
 import dev.sunriseydy.wp.common.vo.WpApiPaginationVO;
 import dev.sunriseydy.wp.post.api.dto.PostDTO;
+import dev.sunriseydy.wp.post.app.service.PostService;
 import dev.sunriseydy.wp.post.domain.repository.PostRepository;
 import dev.sunriseydy.wp.post.domain.vo.WpApiPostVO;
 import lombok.SneakyThrows;
@@ -34,6 +35,9 @@ class SyWpJavaApplicationTests {
 
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private PostService postService;
 
     @Test
     void contextLoads() {
@@ -99,5 +103,13 @@ class SyWpJavaApplicationTests {
     void testGetPostById() {
         PostDTO post = postRepository.getPostById(379L);
         log.debug("post:{}", objectMapper.writeValueAsString(post));
+    }
+
+    @Test
+    void testGetPostList() {
+        // postRepository.getPostById(379L);
+        // postRepository.getPostById(389L);
+        List<PostDTO> postList = postService.getPostList();
+        log.debug("post:{}", postList);
     }
 }

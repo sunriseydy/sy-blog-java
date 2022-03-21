@@ -7,6 +7,11 @@ package dev.sunriseydy.wp.common.constants;
 public interface WpSourceTypeConstant {
 
     /**
+     * 配置名
+     */
+    String PROPERTY_NAME = "sy.wp.source-type";
+
+    /**
      * 数据来源类型 - api
      */
     String SOURCE_TYPE_API = "api";

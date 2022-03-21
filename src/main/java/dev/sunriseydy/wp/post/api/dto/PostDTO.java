@@ -110,4 +110,9 @@ public class PostDTO implements Serializable {
      * todo
      */
     private List<Long> tags;
+
+    public PostDTO clearContent() {
+        this.setContentString(null);
+        return this;
+    }
 }

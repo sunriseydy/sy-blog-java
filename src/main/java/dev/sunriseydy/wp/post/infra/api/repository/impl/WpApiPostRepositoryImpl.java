@@ -2,16 +2,21 @@ package dev.sunriseydy.wp.post.infra.api.repository.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import dev.sunriseydy.wp.common.constants.WpApiConstant;
+import dev.sunriseydy.wp.common.constants.WpSourceTypeConstant;
+import dev.sunriseydy.wp.common.interfaces.ProxySelf;
 import dev.sunriseydy.wp.common.properties.SyWpProperties;
 import dev.sunriseydy.wp.common.utils.WpApiRequestUtil;
 import dev.sunriseydy.wp.common.utils.WpApiResponseUtil;
 import dev.sunriseydy.wp.common.vo.WpApiGlobalRequestParamVO;
 import dev.sunriseydy.wp.common.vo.WpApiPaginationVO;
 import dev.sunriseydy.wp.post.api.dto.PostDTO;
-import dev.sunriseydy.wp.post.domain.vo.WpApiPostVO;
 import dev.sunriseydy.wp.post.domain.repository.PostRepository;
+import dev.sunriseydy.wp.post.domain.vo.WpApiPostVO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
@@ -26,12 +31,16 @@ import java.util.stream.Collectors;
  * @date 2022-03-17 14:12
  */
 @Repository
+@ConditionalOnProperty(name = WpSourceTypeConstant.PROPERTY_NAME, havingValue = WpSourceTypeConstant.SOURCE_TYPE_API)
 @Slf4j
-public class WpApiPostRepositoryImpl implements PostRepository {
+public class WpApiPostRepositoryImpl implements PostRepository, ProxySelf<PostRepository> {
 
     private final SyWpProperties wpProperties;
 
     private final RestTemplate restTemplate;
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
     private final String postApiUri;
 
