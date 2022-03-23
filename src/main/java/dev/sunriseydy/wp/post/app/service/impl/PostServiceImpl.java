@@ -1,6 +1,5 @@
 package dev.sunriseydy.wp.post.app.service.impl;
 
-import dev.sunriseydy.wp.common.constants.WpCacheConstant;
 import dev.sunriseydy.wp.common.utils.PageUtil;
 import dev.sunriseydy.wp.common.vo.PageVO;
 import dev.sunriseydy.wp.post.api.dto.PostDTO;
@@ -8,7 +7,6 @@ import dev.sunriseydy.wp.post.app.service.PostService;
 import dev.sunriseydy.wp.post.domain.repository.PostRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.cache.CacheKeyPrefix;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +15,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static dev.sunriseydy.wp.common.constants.WpCacheConstant.CACHE_KEY_POSTS;
 
 /**
  * @author SunriseYDY
@@ -39,10 +39,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDTO> getPostList() {
-        String prefix = WpCacheConstant.CACHE_KEY_PREFIX + WpCacheConstant.CACHE_NAME_POSTS + CacheKeyPrefix.SEPARATOR;
-        Set<String> keys = redisTemplate.keys(prefix + "*");
+        Set<String> keys = redisTemplate.keys(CACHE_KEY_POSTS + "*");
         return keys != null ? keys.stream()
-                .map(s -> postRepository.getPostById(Long.parseLong(s.replace(prefix, ""))).clearContent())
+                .map(s -> postRepository.getPostById(Long.parseLong(s.replace(CACHE_KEY_POSTS, ""))).clearContent())
                 .sorted(Comparator.comparing(PostDTO::getDate).reversed())
                 .collect(Collectors.toList()) : Collections.emptyList();
     }
