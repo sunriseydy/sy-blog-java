@@ -2,6 +2,7 @@ package dev.sunriseydy.wp.post.infra.api.repository.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import dev.sunriseydy.wp.common.constants.WpApiConstant;
+import dev.sunriseydy.wp.common.constants.WpCacheConstant;
 import dev.sunriseydy.wp.common.constants.WpSourceTypeConstant;
 import dev.sunriseydy.wp.common.interfaces.ProxySelf;
 import dev.sunriseydy.wp.common.properties.SyWpProperties;
@@ -94,6 +95,7 @@ public class WpApiPostRepositoryImpl implements PostRepository, ProxySelf<PostRe
 
     @Override
     public PostDTO getPostById(Long id) {
+        log.info("get this post:{}", id);
         WpApiGlobalRequestParamVO globalRequestParam = WpApiGlobalRequestParamVO.builder()
                 .envelope(Boolean.TRUE)
                 .embed("wp:featuredmedia,wp:term,author")
@@ -102,5 +104,18 @@ public class WpApiPostRepositoryImpl implements PostRepository, ProxySelf<PostRe
         String response = WpApiResponseUtil.checkResponseEntityAndReturnBody(responseEntity);
         WpApiPostVO postVO = WpApiResponseUtil.getResponseBodyAsObject(response, WpApiPostVO.class);
         return postVO.toPostDto();
+    }
+
+    @Override
+    public PostDTO updatePostById(Long id) {
+        log.info("update this post:{}", id);
+        return this.getPostById(id);
+    }
+
+    @Override
+    public void deletePostById(Long id) {
+        String key = WpCacheConstant.CACHE_KEY_POSTS + String.valueOf(id);
+        Object post = redisTemplate.opsForValue().get(key);
+        log.info("delete this post:{},{}", id, post );
     }
 }

@@ -112,4 +112,15 @@ class SyWpJavaApplicationTests {
         List<PostDTO> postList = postService.getPostList();
         log.debug("post:{}", postList);
     }
+
+    @Test
+    void testUpdatePost() {
+        PostDTO postDTO = postRepository.updatePostById(379L);
+        log.debug("post:{}", postDTO);
+    }
+
+    @Test
+    void testDeletePost() {
+        postRepository.deletePostById(379L);
+    }
 }
