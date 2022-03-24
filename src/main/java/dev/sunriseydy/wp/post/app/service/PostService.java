@@ -18,4 +18,9 @@ public interface PostService {
     PageVO<PostDTO> getPostPage(int page, int pageSize);
 
     PostDTO getPostById(Long id);
+
+    PostDTO updatePostById(Long id);
+
+    void deletePostById(Long id);
+
 }

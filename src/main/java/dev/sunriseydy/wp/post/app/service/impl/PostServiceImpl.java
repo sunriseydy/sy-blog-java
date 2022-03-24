@@ -55,4 +55,14 @@ public class PostServiceImpl implements PostService {
     public PostDTO getPostById(Long id) {
         return postRepository.getPostById(id);
     }
+
+    @Override
+    public PostDTO updatePostById(Long id) {
+        return postRepository.updatePostById(id);
+    }
+
+    @Override
+    public void deletePostById(Long id) {
+        postRepository.deletePostById(id);
+    }
 }

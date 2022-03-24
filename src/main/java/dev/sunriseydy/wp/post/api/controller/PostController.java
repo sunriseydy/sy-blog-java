@@ -5,8 +5,10 @@ import dev.sunriseydy.wp.common.vo.PageVO;
 import dev.sunriseydy.wp.post.api.dto.PostDTO;
 import dev.sunriseydy.wp.post.app.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,5 +35,16 @@ public class PostController {
     public Result<PageVO<PostDTO>> getPostPage(@RequestParam(required = false, defaultValue = "1") int page,
                                                @RequestParam(required = false, defaultValue = "10") int pageSize) {
         return Result.ok(postService.getPostPage(page, pageSize));
+    }
+
+    @PutMapping("/{id}")
+    public Result<PostDTO> updatePostById(@NotNull @PathVariable Long id) {
+        return Result.ok(postService.updatePostById(id));
+    }
+
+    @DeleteMapping("/{id}")
+    public Result<?> deletePostById(@NotNull @PathVariable Long id) {
+        postService.deletePostById(id);
+        return Result.ok();
     }
 }
