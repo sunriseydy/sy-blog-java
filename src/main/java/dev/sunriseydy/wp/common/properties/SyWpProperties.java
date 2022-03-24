@@ -34,4 +34,14 @@ public class SyWpProperties {
      */
     @URL
     private String restApiHost;
+
+    /**
+     * wordpress username
+     */
+    private String username;
+
+    /**
+     * wordpress password
+     */
+    private String password;
 }

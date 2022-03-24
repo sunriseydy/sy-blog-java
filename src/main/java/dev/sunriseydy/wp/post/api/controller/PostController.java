@@ -1,6 +1,7 @@
 package dev.sunriseydy.wp.post.api.controller;
 
 import dev.sunriseydy.wp.common.Result;
+import dev.sunriseydy.wp.common.annotion.BasicAuth;
 import dev.sunriseydy.wp.common.vo.PageVO;
 import dev.sunriseydy.wp.post.api.dto.PostDTO;
 import dev.sunriseydy.wp.post.app.service.PostService;
@@ -37,11 +38,13 @@ public class PostController {
         return Result.ok(postService.getPostPage(page, pageSize));
     }
 
+    @BasicAuth
     @PutMapping("/{id}")
     public Result<PostDTO> updatePostById(@NotNull @PathVariable Long id) {
         return Result.ok(postService.updatePostById(id));
     }
 
+    @BasicAuth
     @DeleteMapping("/{id}")
     public Result<?> deletePostById(@NotNull @PathVariable Long id) {
         postService.deletePostById(id);
