@@ -1,6 +1,7 @@
 package dev.sunriseydy.wp.common.exception.controller;
 
 import dev.sunriseydy.wp.common.Result;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
@@ -20,6 +21,7 @@ import java.util.Map;
  * @see org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController
  */
 @Slf4j
+@Hidden
 @Controller
 @RequestMapping("${server.error.path:${error.path:/error}}")
 public class CustomErrorController extends AbstractErrorController {
