@@ -40,6 +40,7 @@ server:
     max-http-post-size: 0
 
 springdoc:
+  version: '@version@'
   paths-to-match: /**
   swagger-ui:
     display-request-duration: true
