@@ -39,6 +39,13 @@ server:
     # HTTP POST请求最大的大小。默认0，无限制，可设置10M
     max-http-post-size: 0
 
+springdoc:
+  paths-to-match: /**
+  swagger-ui:
+    display-request-duration: true
+    operations-sorter: method
+    disable-swagger-default-url: true
+    use-root-path: true
 sy:
   wp:
     source-type: ${WP_SOURCE_TYPE:api}
