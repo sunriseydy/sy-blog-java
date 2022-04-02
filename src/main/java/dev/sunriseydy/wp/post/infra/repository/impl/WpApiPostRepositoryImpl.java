@@ -1,4 +1,4 @@
-package dev.sunriseydy.wp.post.infra.api.repository.impl;
+package dev.sunriseydy.wp.post.infra.repository.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import dev.sunriseydy.wp.common.constants.WpApiConstant;
@@ -114,7 +114,7 @@ public class WpApiPostRepositoryImpl implements PostRepository, ProxySelf<PostRe
 
     @Override
     public void deletePostById(Long id) {
-        String key = WpCacheConstant.CACHE_KEY_POSTS + String.valueOf(id);
+        String key = WpCacheConstant.getCacheKey(WpCacheConstant.CACHE_NAME_POSTS) + String.valueOf(id);
         Object post = redisTemplate.opsForValue().get(key);
         log.info("delete this post:{},{}", id, post );
     }
