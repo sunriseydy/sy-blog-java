@@ -10,7 +10,14 @@ public interface WpCacheConstant {
 
     String CACHE_NAME_POSTS = "posts";
 
-    String CACHE_KEY_POSTS = WpCacheConstant.CACHE_KEY_PREFIX + WpCacheConstant.CACHE_NAME_POSTS + CacheKeyPrefix.SEPARATOR;
-
     String CACHE_KEY_PREFIX = "sy-wp:cache:";
+
+    /**
+     * 通过 cacheName 获取 cacheKey
+     * @param cacheName
+     * @return cacheKey
+     */
+    static String getCacheKey(String cacheName) {
+        return WpCacheConstant.CACHE_KEY_PREFIX + cacheName + CacheKeyPrefix.SEPARATOR;
+    }
 }

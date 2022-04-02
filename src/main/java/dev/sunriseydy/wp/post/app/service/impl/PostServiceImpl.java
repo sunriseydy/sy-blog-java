@@ -1,5 +1,6 @@
 package dev.sunriseydy.wp.post.app.service.impl;
 
+import dev.sunriseydy.wp.common.constants.WpCacheConstant;
 import dev.sunriseydy.wp.common.utils.PageUtil;
 import dev.sunriseydy.wp.common.vo.PageVO;
 import dev.sunriseydy.wp.post.api.dto.PostDTO;
@@ -15,8 +16,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import static dev.sunriseydy.wp.common.constants.WpCacheConstant.CACHE_KEY_POSTS;
 
 /**
  * @author SunriseYDY
@@ -39,9 +38,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDTO> getPostList() {
-        Set<String> keys = redisTemplate.keys(CACHE_KEY_POSTS + "*");
+        Set<String> keys = redisTemplate.keys(WpCacheConstant.getCacheKey(WpCacheConstant.CACHE_NAME_POSTS) + "*");
         return keys != null ? keys.stream()
-                .map(s -> postRepository.getPostById(Long.parseLong(s.replace(CACHE_KEY_POSTS, ""))).clearContent())
+                .map(s -> postRepository.getPostById(Long.parseLong(s.replace(WpCacheConstant.getCacheKey(WpCacheConstant.CACHE_NAME_POSTS), ""))).clearContent())
                 .sorted(Comparator.comparing(PostDTO::getDate).reversed())
                 .collect(Collectors.toList()) : Collections.emptyList();
     }
