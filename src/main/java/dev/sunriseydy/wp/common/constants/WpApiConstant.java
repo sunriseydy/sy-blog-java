@@ -15,5 +15,10 @@ public interface WpApiConstant {
      */
     String API_POST = "/wp/v2/posts";
 
+    /**
+     * category api location
+     */
+    String API_CATEGORY = "/wp/v2/categories";
+
     String API_DETAIL = "/{id}";
 }

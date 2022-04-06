@@ -10,6 +10,8 @@ public interface WpCacheConstant {
 
     String CACHE_NAME_POSTS = "posts";
 
+    String CACHE_NAME_CATEGORIES = "categories";
+
     String CACHE_KEY_PREFIX = "sy-wp:cache:";
 
     /**
