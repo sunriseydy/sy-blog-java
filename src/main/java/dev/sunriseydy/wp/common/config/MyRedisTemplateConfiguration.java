@@ -43,8 +43,8 @@ public class MyRedisTemplateConfiguration {
     }
 
     @Bean
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, Object> template = new RedisTemplate<>();
+    public RedisTemplate<String, ?> redisTemplate(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, ?> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
         template.setValueSerializer(this.jacksonSerializer);
         template.setKeySerializer(this.stringSerializer);

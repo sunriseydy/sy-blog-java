@@ -94,14 +94,14 @@ class SyWpJavaApplicationTests {
     @SneakyThrows
     @Test
     void testGetPostIdList() {
-        List<PostDTO> posts = postRepository.getPostIdList();
+        List<Long> posts = postRepository.getPostIdList();
         log.debug("posts:{}", objectMapper.writeValueAsString(posts));
     }
 
     @SneakyThrows
     @Test
     void testGetPostById() {
-        PostDTO post = postRepository.getPostById(379L);
+        PostDTO post = postRepository.getPostById(389L);
         log.debug("post:{}", objectMapper.writeValueAsString(post));
     }
 

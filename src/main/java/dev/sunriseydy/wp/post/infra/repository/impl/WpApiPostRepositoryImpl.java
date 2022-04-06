@@ -7,25 +7,18 @@ import dev.sunriseydy.wp.common.constants.WpSourceTypeConstant;
 import dev.sunriseydy.wp.common.interfaces.ProxySelf;
 import dev.sunriseydy.wp.common.properties.SyWpProperties;
 import dev.sunriseydy.wp.common.utils.WpApiRequestUtil;
-import dev.sunriseydy.wp.common.utils.WpApiResponseUtil;
 import dev.sunriseydy.wp.common.vo.WpApiGlobalRequestParamVO;
-import dev.sunriseydy.wp.common.vo.WpApiPaginationVO;
 import dev.sunriseydy.wp.post.api.dto.PostDTO;
 import dev.sunriseydy.wp.post.domain.repository.PostRepository;
 import dev.sunriseydy.wp.post.domain.vo.WpApiPostVO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.URI;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author SunriseYDY
@@ -40,57 +33,23 @@ public class WpApiPostRepositoryImpl implements PostRepository, ProxySelf<PostRe
 
     private final RestTemplate restTemplate;
 
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     private final String postApiUri;
 
     private final String postDetailApiUri;
 
-    public WpApiPostRepositoryImpl(SyWpProperties wpProperties, RestTemplateBuilder restTemplateBuilder) {
+    public WpApiPostRepositoryImpl(SyWpProperties wpProperties, RestTemplateBuilder restTemplateBuilder, RedisTemplate<String, Object> redisTemplate) {
         this.wpProperties = wpProperties;
         this.restTemplate = restTemplateBuilder.build();
         this.postApiUri = wpProperties.getRestApiHost() + WpApiConstant.API_PREFIX + WpApiConstant.API_POST;
         this.postDetailApiUri = this.postApiUri + WpApiConstant.API_DETAIL;
+        this.redisTemplate = redisTemplate;
     }
 
     @Override
-    public List<PostDTO> getPostIdList() {
-        int page = 1;
-        int perPage = 10;
-        WpApiPaginationVO pagination = WpApiPaginationVO.builder()
-                .page(page)
-                .perPage(perPage)
-                .build();
-        WpApiGlobalRequestParamVO globalRequestParam = WpApiGlobalRequestParamVO.builder()
-                .envelope(Boolean.TRUE)
-                .fieldsList(Collections.singletonList("id"))
-                .build();
-
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity(URI.create(postApiUri + WpApiRequestUtil.generateQueryParma(pagination, globalRequestParam)), String.class);
-
-        String response = WpApiResponseUtil.checkResponseEntityAndReturnBody(responseEntity);
-
-        int total = WpApiResponseUtil.getResponseTotal(response);
-        int totalPages = WpApiResponseUtil.getResponseTotalPages(response);
-        log.info("page:{}, totalPage:{}", page, totalPages);
-        log.info("total:{}", total);
-
-        List<WpApiPostVO> posts = WpApiResponseUtil.getResponseBodyAsObject(response, new TypeReference<List<WpApiPostVO>>() {
-        });
-
-        while (page++ < totalPages) {
-            log.info("page:{}, totalPage:{}", page, totalPages);
-            pagination = WpApiPaginationVO.builder()
-                    .page(page)
-                    .perPage(perPage)
-                    .build();
-            responseEntity = restTemplate.getForEntity(URI.create(postApiUri + WpApiRequestUtil.generateQueryParma(pagination, globalRequestParam)), String.class);
-            response = WpApiResponseUtil.checkResponseEntityAndReturnBody(responseEntity);
-            posts.addAll(WpApiResponseUtil.getResponseBodyAsObject(response, new TypeReference<List<WpApiPostVO>>() {
-            }));
-        }
-        return posts.stream().map(WpApiPostVO::toPostDto).collect(Collectors.toList());
+    public List<Long> getPostIdList() {
+        return WpApiRequestUtil.getAllItemsId(postApiUri, new TypeReference<List<WpApiPostVO>>() {}, restTemplate, WpApiPostVO::getId);
     }
 
     @Override
@@ -100,10 +59,10 @@ public class WpApiPostRepositoryImpl implements PostRepository, ProxySelf<PostRe
                 .envelope(Boolean.TRUE)
                 .embed("wp:featuredmedia,wp:term,author")
                 .build();
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity(postDetailApiUri + WpApiRequestUtil.generateQueryParma(globalRequestParam), String.class, id);
-        String response = WpApiResponseUtil.checkResponseEntityAndReturnBody(responseEntity);
-        WpApiPostVO postVO = WpApiResponseUtil.getResponseBodyAsObject(response, WpApiPostVO.class);
-        return postVO.toPostDto();
+        return WpApiRequestUtil.getForObjectById(postDetailApiUri + WpApiRequestUtil.generateQueryParma(globalRequestParam),
+                id,
+                restTemplate,
+                WpApiPostVO.class).toPostDto();
     }
 
     @Override

@@ -32,7 +32,7 @@ public class PostServiceImpl implements PostService {
     private RedisTemplate<String, Object> redisTemplate;
 
     @Override
-    public List<PostDTO> getPostIdList() {
+    public List<Long> getPostIdList() {
         return postRepository.getPostIdList();
     }
 

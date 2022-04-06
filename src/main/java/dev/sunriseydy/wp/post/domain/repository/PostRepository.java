@@ -16,7 +16,7 @@ import java.util.List;
 @CacheConfig(cacheNames = WpCacheConstant.CACHE_NAME_POSTS)
 public interface PostRepository {
 
-    List<PostDTO> getPostIdList();
+    List<Long> getPostIdList();
 
     @Cacheable(key = "#id")
     PostDTO getPostById(Long id);

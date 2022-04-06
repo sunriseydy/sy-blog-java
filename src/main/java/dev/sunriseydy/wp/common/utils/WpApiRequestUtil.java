@@ -1,20 +1,29 @@
 package dev.sunriseydy.wp.common.utils;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import dev.sunriseydy.wp.common.annotion.WpApiRequestParam;
+import dev.sunriseydy.wp.common.vo.WpApiGlobalRequestParamVO;
+import dev.sunriseydy.wp.common.vo.WpApiPaginationVO;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 import java.lang.reflect.Field;
+import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -123,5 +132,48 @@ public class WpApiRequestUtil {
     @SneakyThrows
     public String urlEncode(String origin) {
         return URLEncoder.encode(origin, StandardCharsets.UTF_8.name());
+    }
+
+    public <T> T getForObjectById(String url, Long id, RestTemplate restTemplate, Class<T> resultType) {
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class, id);
+        String response = WpApiResponseUtil.checkResponseEntityAndReturnBody(responseEntity);
+        return WpApiResponseUtil.getResponseBodyAsObject(response, resultType);
+    }
+
+    public <T> List<Long> getAllItemsId(String url, TypeReference<List<T>> apiResultTypeRef, RestTemplate restTemplate, Function<T, Long> getIdFunction) {
+        int page = 1;
+        int perPage = 10;
+        WpApiPaginationVO pagination = WpApiPaginationVO.builder()
+                .page(page)
+                .perPage(perPage)
+                .build();
+        WpApiGlobalRequestParamVO globalRequestParam = WpApiGlobalRequestParamVO.builder()
+                .envelope(Boolean.TRUE)
+                .fieldsList(Collections.singletonList("id"))
+                .build();
+
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity(URI.create(url + WpApiRequestUtil.generateQueryParma(pagination, globalRequestParam)), String.class);
+
+        String response = WpApiResponseUtil.checkResponseEntityAndReturnBody(responseEntity);
+
+        int total = WpApiResponseUtil.getResponseTotal(response);
+        int totalPages = WpApiResponseUtil.getResponseTotalPages(response);
+        log.info("page:{}, totalPage:{}", page, totalPages);
+        log.info("total:{}", total);
+
+        List<T> items = WpApiResponseUtil.getResponseBodyAsObject(response, apiResultTypeRef);
+
+        while (page++ < totalPages) {
+            log.info("page:{}, totalPage:{}", page, totalPages);
+            pagination = WpApiPaginationVO.builder()
+                    .page(page)
+                    .perPage(perPage)
+                    .build();
+            responseEntity = restTemplate.getForEntity(URI.create(url + WpApiRequestUtil.generateQueryParma(pagination, globalRequestParam)), String.class);
+            response = WpApiResponseUtil.checkResponseEntityAndReturnBody(responseEntity);
+            items.addAll(WpApiResponseUtil.getResponseBodyAsObject(response, apiResultTypeRef));
+        }
+
+        return items.stream().map(getIdFunction).collect(Collectors.toList());
     }
 }

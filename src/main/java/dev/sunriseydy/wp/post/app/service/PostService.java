@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface PostService {
 
-    List<PostDTO> getPostIdList();
+    List<Long> getPostIdList();
 
     List<PostDTO> getPostList();
 
