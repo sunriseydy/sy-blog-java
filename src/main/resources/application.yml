@@ -1,6 +1,6 @@
 spring:
   application:
-    name: sy-wp-java
+    name: sy-blog-java
   redis:
     host: ${SPRING_REDIS_HOST:localhost}
     port: ${SPRING_REDIS_PORT:6379}
@@ -56,4 +56,4 @@ sy:
 
 logging:
   level:
-    dev.sunriseydy.wp: debug
+    dev.sunriseydy.blog: debug
