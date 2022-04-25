@@ -20,5 +20,10 @@ public interface WpApiConstant {
      */
     String API_CATEGORY = "/wp/v2/categories";
 
+    /**
+     * tag api location
+     */
+    String API_TAG = "/wp/v2/tags";
+
     String API_DETAIL = "/{id}";
 }

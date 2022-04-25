@@ -12,6 +12,8 @@ public interface BlogCacheConstant {
 
     String CACHE_NAME_CATEGORIES = "categories";
 
+    String CACHE_NAME_TAGS = "tags";
+
     String CACHE_KEY_PREFIX = "sy-wp:cache:";
 
     /**
