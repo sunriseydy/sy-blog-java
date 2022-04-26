@@ -50,4 +50,9 @@ public class SyBlogProperties {
      * wordpress password
      */
     private String password;
+
+    /**
+     * 是否在启动时自动初始化缓存，默认为 true
+     */
+    private Boolean initCache = true;
 }
