@@ -38,7 +38,7 @@ public class WpApiTagRepositoryImpl implements TagRepository, ProxySelf<TagRepos
     public WpApiTagRepositoryImpl(SyBlogProperties wpProperties, RestTemplateBuilder restTemplateBuilder) {
         this.wpProperties = wpProperties;
         this.restTemplate = restTemplateBuilder.build();
-        this.tagApiUri = wpProperties.getRestApiHost() + WpApiConstant.API_PREFIX + WpApiConstant.API_CATEGORY;
+        this.tagApiUri = wpProperties.getRestApiHost() + WpApiConstant.API_PREFIX + WpApiConstant.API_TAG;
         this.tagDetailApiUri = this.tagApiUri + WpApiConstant.API_DETAIL;
     }
 

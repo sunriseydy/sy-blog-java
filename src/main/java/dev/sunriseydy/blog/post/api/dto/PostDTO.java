@@ -2,7 +2,9 @@ package dev.sunriseydy.blog.post.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import dev.sunriseydy.blog.category.api.dto.CategoryDTO;
 import dev.sunriseydy.blog.common.constants.DateTimeConstant;
+import dev.sunriseydy.blog.tag.api.dto.TagDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -89,6 +91,8 @@ public class PostDTO implements Serializable {
      */
     private Long featuredMedia;
 
+    private String featuredMediaUrl;
+
     /**
      * string	Whether or not comments are open on the object. Context: view, edit One of: open, closed
      */
@@ -103,13 +107,13 @@ public class PostDTO implements Serializable {
      * array	The terms assigned to the object in the category taxonomy. Context: view, edit
      * todo
      */
-    private List<Long> categories;
+    private List<CategoryDTO> categories;
 
     /**
      * array	The terms assigned to the object in the post_tag taxonomy. Context: view, edit
      * todo
      */
-    private List<Long> tags;
+    private List<TagDTO> tags;
 
     public PostDTO clearContent() {
         this.setContentString(null);

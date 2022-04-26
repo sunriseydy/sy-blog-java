@@ -64,16 +64,6 @@ public class CategoryDTO implements Serializable {
     private String slug;
 
     /**
-     * Type attribution for the term.
-     * Read only
-     *
-     * Context: view, embed, edit
-     *
-     * One of: category, post_tag, nav_menu, link_category, post_format
-     */
-    private String taxonomy;
-
-    /**
      * The parent term ID.
      * Context: view, edit
      */

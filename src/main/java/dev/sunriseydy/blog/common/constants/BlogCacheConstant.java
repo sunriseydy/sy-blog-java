@@ -14,7 +14,7 @@ public interface BlogCacheConstant {
 
     String CACHE_NAME_TAGS = "tags";
 
-    String CACHE_KEY_PREFIX = "sy-wp:cache:";
+    String CACHE_KEY_PREFIX = "sy-blog:cache:";
 
     /**
      * 通过 cacheName 获取 cacheKey

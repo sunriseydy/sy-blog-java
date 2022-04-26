@@ -26,6 +26,8 @@ public class WpApiTagVO implements Serializable {
 
     private static final long serialVersionUID = -8618210054530016931L;
 
+    public static final String TAXONOMY_CATEGORY = "category";
+
     /**
      * Unique identifier for the term.
      * Read only

@@ -3,8 +3,11 @@ package dev.sunriseydy.blog.post.domain.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dev.sunriseydy.blog.common.constants.DateTimeConstant;
 import dev.sunriseydy.blog.common.vo.WpApiRenderedVO;
 import dev.sunriseydy.blog.post.api.dto.PostDTO;
@@ -171,13 +174,25 @@ public class WpApiPostVO implements Serializable {
      */
     private List<Long> tags;
 
+    @JsonProperty(value = "_embedded")
+    private ObjectNode embedded;
+
     public PostDTO toPostDto() {
         PostDTO postDTO = new PostDTO();
         BeanUtils.copyProperties(this, postDTO);
         postDTO.setTitleString(WpApiRenderedVO.getRenderedString(this.getTitle()));
         postDTO.setExcerptString(WpApiRenderedVO.getRenderedString(this.getExcerpt()));
         postDTO.setContentString(WpApiRenderedVO.getRenderedString(this.getContent()));
+        // 设置 featuredMediaUrl
+        if (this.embedded != null
+                && this.embedded.hasNonNull("wp:featuredmedia")
+                && this.embedded.get("wp:featuredmedia").isArray()
+                && this.embedded.get("wp:featuredmedia").hasNonNull(0)
+                && this.embedded.get("wp:featuredmedia").get(0).hasNonNull("source_url")) {
+            JsonNode sourceUrl = this.embedded.get("wp:featuredmedia").get(0).get("source_url");
+            postDTO.setFeaturedMediaUrl(sourceUrl.asText());
 
+        }
         return postDTO;
     }
 
