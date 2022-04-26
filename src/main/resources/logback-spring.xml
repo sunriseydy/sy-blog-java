@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Author: SunriseYDY -->
+
+<configuration>
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+
+    <!-- 应用名称 -->
+    <springProperty scope="context" name="APP_NAME" source="spring.application.name" defaultValue="sy-blog-java"/>
+
+    <!-- 日志根目录-->
+    <springProperty scope="context" name="LOG_PATH" source="logging.path" defaultValue="./logs"/>
+
+    <springProfile name="local,default">
+        <!-- 日志级别 -->
+        <springProperty scope="context" name="LOG_ROOT_LEVEL" source="logging.level.root" defaultValue="INFO"/>
+        <!-- 配置日志的滚动时间 ，表示只保留最近 1 天的日志-->
+        <property name="MAX_HISTORY" value="1"/>
+    </springProfile>
+    <springProfile name="dev,uat">
+        <!-- 日志级别 -->
+        <springProperty scope="context" name="LOG_ROOT_LEVEL" source="logging.level.root" defaultValue="INFO"/>
+        <!-- 配置日志的滚动时间 ，表示只保留最近 10 天的日志-->
+        <property name="MAX_HISTORY" value="10"/>
+    </springProfile>
+    <springProfile name="prod">
+        <!-- 日志级别 -->
+        <springProperty scope="context" name="LOG_ROOT_LEVEL" source="logging.level.root" defaultValue="ERROR"/>
+        <!-- 配置日志的滚动时间 ，表示只保留最近 30 天的日志-->
+        <property name="MAX_HISTORY" value="30"/>
+    </springProfile>
+
+    <springProfile name="local,default">
+        <property name="LOG_FILE_ALL" value="0" />
+        <property name="LOG_FILE_ERROR" value="0" />
+        <property name="LOG_STDOUT" value="STDOUT" />
+    </springProfile>
+    <springProfile name="dev,uat,prod">
+        <property name="LOG_FILE_ALL" value="FILE_ALL" />
+        <property name="LOG_FILE_ERROR" value="FILE_ERROR" />
+        <property name="LOG_STDOUT" value="0" />
+    </springProfile>
+
+    <!-- 日志文件编码-->
+    <property name="FILE_LOG_CHARSET" value="UTF-8" />
+    <property name="CONSOLE_LOG_CHARSET" value="UTF-8" />
+
+    <!-- 日志文件路径+日期-->
+    <property name="LOG_HOME" value="${LOG_PATH}/${APP_NAME}" />
+    <property name="LOG_DIR" value="${LOG_HOME}/%d{yyyyMMdd}" />
+
+    <!--对日志进行格式化-->
+    <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{yyyyMMdd HH:mm:ss.SSS}){faint}|%clr(%5p)|%clr(${PID:- }){faint}-%clr([%20.20t]){magenta}|%clr([%40.40logger{39}]){cyan} %clr(-->){faint} %m%n "/>
+    <property name="FILE_LOG_PATTERN" value="%d{yyyyMMdd HH:mm:ss.SSS}|%5p|${PID:- }-[%30.30t]|[%40.40logger{39}] --> %m%n "/>
+
+    <!--文件大小，默认100MB-->
+    <property name="MAX_FILE_SIZE" value="100MB" />
+
+    <!--输出到控制台-->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- 输出的日志内容格式化-->
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </layout>
+    </appender>
+
+    <appender name="0" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    </appender>
+
+    <!-- 定义 ALL 日志的输出方式:-->
+    <appender name="FILE_ALL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--日志文件路径，日志文件名称-->
+        <File>${LOG_HOME}/all_${APP_NAME}.log</File>
+
+        <!-- 设置滚动策略，当天的日志大小超过 ${MAX_FILE_SIZE} 文件大小时候，新的内容写入新的文件， 默认100MB -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+
+            <!--日志文件路径，新的 ALL 日志文件名称，“ i ” 是个变量 -->
+            <FileNamePattern>${LOG_DIR}/all_${APP_NAME}_%i.log</FileNamePattern>
+
+            <!-- 配置日志的滚动时间 ，表示只保留最近 30 天的日志-->
+            <MaxHistory>${MAX_HISTORY}</MaxHistory>
+
+            <!--当天的日志大小超过 ${MAX_FILE_SIZE} 文件大小时候，新的内容写入新的文件， 默认100MB-->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+
+        </rollingPolicy>
+
+        <!-- 输出的日志内容格式化-->
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </layout>
+    </appender>
+
+    <!-- 定义 ERROR 日志的输出方式:-->
+    <appender name="FILE_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 下面为配置只输出error级别的日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <OnMismatch>DENY</OnMismatch>
+            <OnMatch>ACCEPT</OnMatch>
+        </filter>
+        <!--日志文件路径，日志文件名称-->
+        <File>${LOG_HOME}/err_${APP_NAME}.log</File>
+
+        <!-- 设置滚动策略，当天的日志大小超过 ${MAX_FILE_SIZE} 文件大小时候，新的内容写入新的文件， 默认10MB -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+
+            <!--日志文件路径，新的 ERR 日志文件名称，“ i ” 是个变量 -->
+            <FileNamePattern>${LOG_DIR}/err_${APP_NAME}_%i.log</FileNamePattern>
+
+            <!-- 配置日志的滚动时间 ，表示只保留最近 30 天的日志-->
+            <MaxHistory>${MAX_HISTORY}</MaxHistory>
+
+            <!--当天的日志大小超过 ${MAX_FILE_SIZE} 文件大小时候，新的内容写入新的文件， 默认10MB-->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+
+        <!-- 输出的日志内容格式化-->
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>${FILE_LOG_PATTERN}</Pattern>
+        </layout>
+    </appender>
+
+    <!-- additivity 设为false,则logger内容不附加至root ，配置以配置包下的所有类的日志的打印，级别是 ERROR-->
+
+    <logger name="org.springframework"     level="WARN" />
+    <logger name="org.apache.commons"      level="ERROR" />
+    <logger name="org.apache.zookeeper"    level="ERROR"  />
+    <logger name="com.alibaba.dubbo.monitor" level="ERROR"/>
+    <logger name="com.alibaba.dubbo.remoting" level="ERROR" />
+    <logger name="io.choerodon.asgard" level="ERROR" />
+    <logger name="com.netflix.discovery" level="ERROR" />
+    <logger name="com.netflix" level="ERROR" />
+
+    <!-- ${LOG_ROOT_LEVEL} 日志级别 -->
+    <root level="${LOG_ROOT_LEVEL}">
+        <!-- LOG_STDOUT 添加到这logger -->
+        <appender-ref ref="${LOG_STDOUT}"/>
+        <!-- FILE_ALL 日志输出添加到 logger -->
+        <appender-ref ref="${LOG_FILE_ALL}"/>
+
+        <!-- FILE_ERROR 日志输出添加到 logger -->
+        <appender-ref ref="${LOG_FILE_ERROR}"/>
+    </root>
+
+</configuration>
