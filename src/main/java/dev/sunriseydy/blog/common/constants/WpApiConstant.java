@@ -25,5 +25,10 @@ public interface WpApiConstant {
      */
     String API_TAG = "/wp/v2/tags";
 
+    /**
+     * user api location
+     */
+    String API_USER = "/wp/v2/users";
+
     String API_DETAIL = "/{id}";
 }

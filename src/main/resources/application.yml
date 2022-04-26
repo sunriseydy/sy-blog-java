@@ -53,7 +53,7 @@ sy:
     rest-api-host: ${WP_REST_API_HOST:https://xn--ghq2ewa7745eca.xn--6qq986b3xl}
     username: ${WP_USERNAME:}
     password: ${WP_PASSWORD:}
-    init-cache: ${BLOG_INIT_CACHE:true}
+    init-cache: ${BLOG_INIT_CACHE:false}
 
 logging:
   level:

@@ -14,6 +14,8 @@ public interface BlogCacheConstant {
 
     String CACHE_NAME_TAGS = "tags";
 
+    String CACHE_NAME_USERS = "users";
+
     String CACHE_KEY_PREFIX = "sy-blog:cache:";
 
     /**
