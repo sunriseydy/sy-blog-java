@@ -30,5 +30,10 @@ public interface WpApiConstant {
      */
     String API_USER = "/wp/v2/users";
 
+    /**
+     * page api location
+     */
+    String API_PAGE = "/wp/v2/pages";
+
     String API_DETAIL = "/{id}";
 }
