@@ -18,6 +18,10 @@ public interface BlogCacheConstant {
 
     String CACHE_NAME_PAGES = "pages";
 
+    String CACHE_NAME_MENUS = "menus";
+
+    String CACHE_NAME_MENU_ITEMS = "menu-items";
+
     String CACHE_KEY_PREFIX = "sy-blog:cache:";
 
     /**
