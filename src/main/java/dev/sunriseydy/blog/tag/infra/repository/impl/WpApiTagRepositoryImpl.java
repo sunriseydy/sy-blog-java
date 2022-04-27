@@ -3,7 +3,6 @@ package dev.sunriseydy.blog.tag.infra.repository.impl;
 import com.fasterxml.jackson.core.type.TypeReference;
 import dev.sunriseydy.blog.common.constants.BlogSourceTypeConstant;
 import dev.sunriseydy.blog.common.constants.WpApiConstant;
-import dev.sunriseydy.blog.common.interfaces.ProxySelf;
 import dev.sunriseydy.blog.common.properties.SyBlogProperties;
 import dev.sunriseydy.blog.common.utils.WpApiRequestUtil;
 import dev.sunriseydy.blog.common.vo.WpApiGlobalRequestParamVO;
@@ -25,7 +24,7 @@ import java.util.List;
 @Slf4j
 @Repository
 @ConditionalOnProperty(name = BlogSourceTypeConstant.PROPERTY_NAME, havingValue = BlogSourceTypeConstant.SOURCE_TYPE_WP_API)
-public class WpApiTagRepositoryImpl implements TagRepository, ProxySelf<TagRepository> {
+public class WpApiTagRepositoryImpl implements TagRepository {
 
     private final SyBlogProperties wpProperties;
 

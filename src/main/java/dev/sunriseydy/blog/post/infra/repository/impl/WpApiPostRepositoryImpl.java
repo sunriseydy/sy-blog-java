@@ -6,7 +6,6 @@ import dev.sunriseydy.blog.category.domain.repository.CategoryRepository;
 import dev.sunriseydy.blog.common.constants.BlogCacheConstant;
 import dev.sunriseydy.blog.common.constants.BlogSourceTypeConstant;
 import dev.sunriseydy.blog.common.constants.WpApiConstant;
-import dev.sunriseydy.blog.common.interfaces.ProxySelf;
 import dev.sunriseydy.blog.common.properties.SyBlogProperties;
 import dev.sunriseydy.blog.common.utils.WpApiRequestUtil;
 import dev.sunriseydy.blog.common.vo.WpApiGlobalRequestParamVO;
@@ -34,7 +33,7 @@ import java.util.stream.Collectors;
 @Repository
 @ConditionalOnProperty(name = BlogSourceTypeConstant.PROPERTY_NAME, havingValue = BlogSourceTypeConstant.SOURCE_TYPE_WP_API)
 @Slf4j
-public class WpApiPostRepositoryImpl implements PostRepository, ProxySelf<PostRepository> {
+public class WpApiPostRepositoryImpl implements PostRepository {
 
     private final SyBlogProperties wpProperties;
 
