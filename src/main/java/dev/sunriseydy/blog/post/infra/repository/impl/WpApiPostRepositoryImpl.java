@@ -73,7 +73,7 @@ public class WpApiPostRepositoryImpl implements PostRepository, ProxySelf<PostRe
         log.info("get this post:{}", id);
         WpApiGlobalRequestParamVO globalRequestParam = WpApiGlobalRequestParamVO.builder()
                 .envelope(Boolean.TRUE)
-                .embed("wp:featuredmedia,wp:term,author")
+                .embed("wp:featuredmedia")
                 .build();
         WpApiPostVO postVO = WpApiRequestUtil.getForObjectById(postDetailApiUri + WpApiRequestUtil.generateQueryParma(globalRequestParam),
                 id,
