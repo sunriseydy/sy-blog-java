@@ -191,7 +191,6 @@ public class WpApiPostVO implements Serializable {
                 && this.embedded.get("wp:featuredmedia").get(0).hasNonNull("source_url")) {
             JsonNode sourceUrl = this.embedded.get("wp:featuredmedia").get(0).get("source_url");
             postDTO.setFeaturedMediaUrl(sourceUrl.asText());
-
         }
         return postDTO;
     }

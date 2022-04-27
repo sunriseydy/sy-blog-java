@@ -1,7 +1,6 @@
 package dev.sunriseydy.blog.post.infra.repository.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import dev.sunriseydy.blog.category.api.dto.CategoryDTO;
 import dev.sunriseydy.blog.category.domain.repository.CategoryRepository;
 import dev.sunriseydy.blog.common.constants.BlogCacheConstant;
 import dev.sunriseydy.blog.common.constants.BlogSourceTypeConstant;
@@ -12,11 +11,9 @@ import dev.sunriseydy.blog.common.vo.WpApiGlobalRequestParamVO;
 import dev.sunriseydy.blog.post.api.dto.PostDTO;
 import dev.sunriseydy.blog.post.domain.repository.PostRepository;
 import dev.sunriseydy.blog.post.domain.vo.WpApiPostVO;
-import dev.sunriseydy.blog.tag.api.dto.TagDTO;
 import dev.sunriseydy.blog.tag.domain.repository.TagRepository;
 import dev.sunriseydy.blog.user.domain.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -24,7 +21,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author SunriseYDY
@@ -78,28 +74,8 @@ public class WpApiPostRepositoryImpl implements PostRepository {
                 id,
                 restTemplate,
                 WpApiPostVO.class);
-        PostDTO postDTO = postVO.toPostDto();
-        // 获取 category
-        if (CollectionUtils.isNotEmpty(postVO.getCategories())) {
-            List<CategoryDTO> categories = postVO.getCategories()
-                    .stream()
-                    .map(categoryRepository::getCategoryById)
-                    .collect(Collectors.toList());
-            postDTO.setCategoriesList(categories);
-        }
-        // 获取 tag
-        if (CollectionUtils.isNotEmpty(postVO.getTags())) {
-            List<TagDTO> tags = postVO.getTags()
-                    .stream()
-                    .map(tagRepository::getTagById)
-                    .collect(Collectors.toList());
-            postDTO.setTagsList(tags);
-        }
-        // 获取 user
-        if (postVO.getAuthor() != null) {
-            postDTO.setAuthorDto(this.userRepository.getUserById(postVO.getAuthor()));
-        }
-        return postDTO;
+
+        return postVO.toPostDto();
     }
 
     @Override
