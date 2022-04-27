@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import dev.sunriseydy.blog.category.api.dto.CategoryDTO;
 import dev.sunriseydy.blog.common.constants.DateTimeConstant;
 import dev.sunriseydy.blog.tag.api.dto.TagDTO;
+import dev.sunriseydy.blog.user.api.dto.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -80,6 +81,8 @@ public class PostDTO implements Serializable {
      */
     private Long author;
 
+    private UserDTO authorDto;
+
     /**
      * object	The excerpt for the object. Context: view, edit, embed
      */
@@ -107,13 +110,24 @@ public class PostDTO implements Serializable {
      * array	The terms assigned to the object in the category taxonomy. Context: view, edit
      * todo
      */
-    private List<CategoryDTO> categories;
+    private List<Long> categories;
+
+    /**
+     * array	The terms assigned to the object in the category taxonomy. Context: view, edit
+     * todo
+     */
+    private List<CategoryDTO> categoriesList;
 
     /**
      * array	The terms assigned to the object in the post_tag taxonomy. Context: view, edit
      * todo
      */
-    private List<TagDTO> tags;
+    private List<Long> tags;
+    /**
+     * array	The terms assigned to the object in the post_tag taxonomy. Context: view, edit
+     * todo
+     */
+    private List<TagDTO> tagsList;
 
     public PostDTO clearContent() {
         this.setContentString(null);

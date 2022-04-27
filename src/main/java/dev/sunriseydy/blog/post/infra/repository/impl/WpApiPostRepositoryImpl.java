@@ -15,6 +15,7 @@ import dev.sunriseydy.blog.post.domain.repository.PostRepository;
 import dev.sunriseydy.blog.post.domain.vo.WpApiPostVO;
 import dev.sunriseydy.blog.tag.api.dto.TagDTO;
 import dev.sunriseydy.blog.tag.domain.repository.TagRepository;
+import dev.sunriseydy.blog.user.domain.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -45,11 +46,13 @@ public class WpApiPostRepositoryImpl implements PostRepository, ProxySelf<PostRe
 
     private final TagRepository tagRepository;
 
+    private final UserRepository userRepository;
+
     private final String postApiUri;
 
     private final String postDetailApiUri;
 
-    public WpApiPostRepositoryImpl(SyBlogProperties wpProperties, RestTemplateBuilder restTemplateBuilder, RedisTemplate<String, Object> redisTemplate, CategoryRepository categoryRepository, TagRepository tagRepository) {
+    public WpApiPostRepositoryImpl(SyBlogProperties wpProperties, RestTemplateBuilder restTemplateBuilder, RedisTemplate<String, Object> redisTemplate, CategoryRepository categoryRepository, TagRepository tagRepository, UserRepository userRepository) {
         this.wpProperties = wpProperties;
         this.restTemplate = restTemplateBuilder.build();
         this.postApiUri = wpProperties.getRestApiHost() + WpApiConstant.API_PREFIX + WpApiConstant.API_POST;
@@ -57,6 +60,7 @@ public class WpApiPostRepositoryImpl implements PostRepository, ProxySelf<PostRe
         this.redisTemplate = redisTemplate;
         this.categoryRepository = categoryRepository;
         this.tagRepository = tagRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -82,7 +86,7 @@ public class WpApiPostRepositoryImpl implements PostRepository, ProxySelf<PostRe
                     .stream()
                     .map(categoryRepository::getCategoryById)
                     .collect(Collectors.toList());
-            postDTO.setCategories(categories);
+            postDTO.setCategoriesList(categories);
         }
         // 获取 tag
         if (CollectionUtils.isNotEmpty(postVO.getTags())) {
@@ -90,7 +94,11 @@ public class WpApiPostRepositoryImpl implements PostRepository, ProxySelf<PostRe
                     .stream()
                     .map(tagRepository::getTagById)
                     .collect(Collectors.toList());
-            postDTO.setTags(tags);
+            postDTO.setTagsList(tags);
+        }
+        // 获取 user
+        if (postVO.getAuthor() != null) {
+            postDTO.setAuthorDto(this.userRepository.getUserById(postVO.getAuthor()));
         }
         return postDTO;
     }
