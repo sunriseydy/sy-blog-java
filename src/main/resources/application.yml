@@ -1,6 +1,33 @@
 spring:
   application:
     name: sy-blog-java
+  datasource:
+    dynamic:
+      enabled: true
+      primary: typecho
+      strict: true
+      datasource:
+        wordpress:
+          url: ${SPRING_WORDPRESS_DATASOURCE_URL:jdbc:mysql://localhost:3306/blog?useUnicode=true&characterEncoding=utf-8&useSSL=false&useTimezone=true&serverTimezone=Asia/Shanghai}
+          username: ${SPRING_WORDPRESS_DATASOURCE_USERNAME:root}
+          password: ${SPRING_WORDPRESS_DATASOURCE_PASSWORD:root}
+        typecho:
+          url: ${SPRING_TYPECHO_DATASOURCE_URL:jdbc:mysql://localhost:3306/typecho?useUnicode=true&characterEncoding=utf-8&useSSL=false&useTimezone=true&serverTimezone=Asia/Shanghai}
+          username: ${SPRING_TYPECHO_DATASOURCE_USERNAME:root}
+          password: ${SPRING_TYPECHO_DATASOURCE_PASSWORD:root}
+      hikari:
+        # 连接池最小空闲连接数
+        min-idle: ${SPRING_DATASOURCE_MIN_IDLE:20}
+        # 连接池允许的最大连接数
+        max-pool-size: ${SPRING_DATASOURCE_MAX_POOL_SIZE:200}
+        # 等待连接池分配连接的最大时长（毫秒）
+        connection-timeout: ${SPRING_DATASOURCE_CONNECTION_TIMEOUT:30000}
+        # 空闲连接存活最大时间，默认600000（10分钟）
+        idle-timeout: 30000
+        # 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+        max-lifetime: 1800000
+        connection-test-query: SELECT 1
+
   redis:
     host: ${SPRING_REDIS_HOST:localhost}
     port: ${SPRING_REDIS_PORT:6379}
@@ -38,6 +65,14 @@ server:
     direct-buffers: true
     # HTTP POST请求最大的大小。默认0，无限制，可设置10M
     max-http-post-size: 0
+
+mybatis:
+  mapper-locations:
+    - classpath*:/mapper/**/*Mapper.xml
+  configuration:
+    mapUnderscoreToCamelCase: true
+    cache-enabled: false #禁用二级缓存
+    local-cache-scope: statement #一级缓存指定为statement级别
 
 springdoc:
   version: '@version@'
