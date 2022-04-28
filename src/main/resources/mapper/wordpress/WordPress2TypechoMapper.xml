@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dev.sunriseydy.blog.db.wordpress.mapper.WordPress2TypechoMapper">
+    <select id="selectTerms" resultType="dev.sunriseydy.blog.db.typecho.entity.TypechoMetas">
+        select wt.term_id                                                         mid,
+               wt.name                                                            name,
+               wt.slug                                                            slug,
+               case when wtt.taxonomy = 'category' then 'category' else 'tag' end type,
+               substr(wtt.description from 1 for 150)                             description,
+               wtt.count                                                          count,
+               0                                                                  `order`,
+               wtt.parent                                                         parent
+        from wp_terms wt
+                 inner join wp_term_taxonomy wtt on wtt.term_id = wt.term_id and wtt.taxonomy in ('post_tag', 'category')
+    </select>
+    <select id="selectRelationships" resultType="dev.sunriseydy.blog.db.typecho.entity.TypechoRelationships">
+        select wtr.object_id cid, wtr.term_taxonomy_id mid
+        from wp_term_relationships wtr
+                 inner join wp_term_taxonomy wtt on wtt.term_taxonomy_id = wtr.term_taxonomy_id
+            and wtt.taxonomy in ('post_tag', 'category')
+    </select>
+    <select id="selectContents" resultType="dev.sunriseydy.blog.db.typecho.entity.TypechoContents">
+        select wp.ID                                                  cid,
+               wp.post_title                                          title,
+               wp.post_name                                           slug,
+               unix_timestamp(wp.post_date)                           created,
+               unix_timestamp(wp.post_modified)                       modified,
+               wp.post_content                                        text,
+               wp.menu_order                                          `order`,
+               wp.post_author                                         authorId,
+               null                                                   template,
+               wp.post_type                                           type,
+               wp.post_status                                         status,
+               wp.post_password                                       password,
+               wp.comment_count                                       commentsNum,
+               case when wp.comment_status = 'open' then 1 else 0 end allowComment,
+               case when wp.ping_status = 'open' then 1 else 0 end    allowPing,
+               1                                                      allowFeed,
+               wp.post_parent                                         parent
+        from wp_posts wp
+        where wp.post_type in ('post', 'page')
+    </select>
+</mapper>
