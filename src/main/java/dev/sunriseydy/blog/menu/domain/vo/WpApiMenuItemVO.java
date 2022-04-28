@@ -4,10 +4,12 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import dev.sunriseydy.blog.common.vo.WpApiRenderedVO;
+import dev.sunriseydy.blog.menu.api.dto.MenuItemDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 
@@ -55,4 +57,11 @@ public class WpApiMenuItemVO implements Serializable {
     private String target;
 
     private Long menus;
+
+    public MenuItemDTO toMenuItemDTO() {
+        MenuItemDTO dto = new MenuItemDTO();
+        BeanUtils.copyProperties(this, dto);
+        dto.setTitleString(WpApiRenderedVO.getRenderedString(this.getTitle()));
+        return dto;
+    }
 }

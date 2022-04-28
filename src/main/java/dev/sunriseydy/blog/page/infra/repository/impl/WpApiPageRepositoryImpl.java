@@ -9,7 +9,6 @@ import dev.sunriseydy.blog.common.vo.WpApiGlobalRequestParamVO;
 import dev.sunriseydy.blog.page.api.dto.PageDTO;
 import dev.sunriseydy.blog.page.domain.repository.PageRepository;
 import dev.sunriseydy.blog.page.domain.vo.WpApiPageVO;
-import dev.sunriseydy.blog.user.domain.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -31,17 +30,14 @@ public class WpApiPageRepositoryImpl implements PageRepository {
 
     private final RestTemplate restTemplate;
 
-    private final UserRepository userRepository;
-
     private final String pageApiUri;
 
     private final String pageDetailApiUri;
 
-    public WpApiPageRepositoryImpl(SyBlogProperties wpProperties, RestTemplateBuilder restTemplateBuilder, UserRepository userRepository) {
+    public WpApiPageRepositoryImpl(SyBlogProperties wpProperties, RestTemplateBuilder restTemplateBuilder) {
         this.wpProperties = wpProperties;
         this.restTemplate = restTemplateBuilder.build();
         this.pageApiUri = wpProperties.getRestApiHost() + WpApiConstant.API_PREFIX + WpApiConstant.API_PAGE;
-        this.userRepository = userRepository;
         this.pageDetailApiUri = this.pageApiUri + WpApiConstant.API_DETAIL;
     }
 
@@ -58,12 +54,7 @@ public class WpApiPageRepositoryImpl implements PageRepository {
                 .build();
         WpApiPageVO pageVO = WpApiRequestUtil.getForObjectById(pageDetailApiUri + WpApiRequestUtil.generateQueryParma(globalRequestParam),
                 id, restTemplate, WpApiPageVO.class);
-        PageDTO pageDTO = pageVO.toPageDTO();
-        // 获取 user
-        if (pageDTO.getAuthor() != null) {
-            pageDTO.setAuthorDto(this.userRepository.getUserById(pageDTO.getAuthor()));
-        }
-        return pageDTO;
+        return pageVO.toPageDTO();
     }
 
     @Override

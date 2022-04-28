@@ -35,5 +35,15 @@ public interface WpApiConstant {
      */
     String API_PAGE = "/wp/v2/pages";
 
+    /**
+     * menu items api location
+     */
+    String API_MENU_ITEM = "/wp/v2/menu-items";
+
+    /**
+     * menu api location
+     */
+    String API_MENU = "/wp/v2/menus";
+
     String API_DETAIL = "/{id}";
 }

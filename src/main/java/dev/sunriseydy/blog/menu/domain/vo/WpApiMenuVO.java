@@ -3,10 +3,12 @@ package dev.sunriseydy.blog.menu.domain.vo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import dev.sunriseydy.blog.menu.api.dto.MenuDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 import java.util.List;
@@ -34,4 +36,10 @@ public class WpApiMenuVO implements Serializable {
     private String slug;
 
     private List<String> locations;
+
+    public MenuDTO toMenuDTO() {
+        MenuDTO dto = new MenuDTO();
+        BeanUtils.copyProperties(this, dto);
+        return dto;
+    }
 }
