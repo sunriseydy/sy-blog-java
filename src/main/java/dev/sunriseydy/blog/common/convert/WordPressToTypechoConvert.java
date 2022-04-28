@@ -60,7 +60,7 @@ public class WordPressToTypechoConvert {
         List<TypechoContents> typechoContents = wordPress2TypechoMapper.selectContents();
         if (CollectionUtils.isNotEmpty(typechoContents)) {
             typechoContents.forEach(typechoContentsMapper::insert);
-            message.append("转换的文章和页面数量：" + typechoContents.size());
+            message.append("转换的文章和页面数量：").append(typechoContents.size());
             message.append("\n");
         }
         return message.toString();
