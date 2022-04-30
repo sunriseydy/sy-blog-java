@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import dev.sunriseydy.blog.common.constants.BlogDataSourceConstant;
 import dev.sunriseydy.blog.db.typecho.entity.TypechoMetas;
 
+import java.util.List;
+
 /**
  * <p>
  *  Mapper 接口
@@ -15,5 +17,5 @@ import dev.sunriseydy.blog.db.typecho.entity.TypechoMetas;
  */
 @DS(BlogDataSourceConstant.TYPECHO)
 public interface TypechoMetasMapper extends BaseMapper<TypechoMetas> {
-
+    List<TypechoMetas> getPostMetas(Long cid);
 }

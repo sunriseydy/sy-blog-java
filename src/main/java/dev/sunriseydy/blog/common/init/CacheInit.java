@@ -29,25 +29,25 @@ public class CacheInit implements CommandLineRunner {
     @Autowired
     private SyBlogProperties syBlogProperties;
 
-    @Autowired
+    @Autowired(required = false)
     private CategoryRepository categoryRepository;
 
-    @Autowired
+    @Autowired(required = false)
     private TagRepository tagRepository;
 
-    @Autowired
+    @Autowired(required = false)
     private UserRepository userRepository;
 
-    @Autowired
+    @Autowired(required = false)
     private MenuRepository menuRepository;
 
-    @Autowired
+    @Autowired(required = false)
     private MenuItemRepository menuItemRepository;
 
-    @Autowired
+    @Autowired(required = false)
     private PageRepository pageRepository;
 
-    @Autowired
+    @Autowired(required = false)
     private PostRepository postRepository;
 
     @Override
@@ -60,29 +60,43 @@ public class CacheInit implements CommandLineRunner {
         log.info("开始初始化缓存...");
         // 分类 category
         log.info("开始缓存分类");
-        this.initCache(categoryRepository::getCategoryIdList, categoryRepository::updateCategoryById);
+        if (categoryRepository != null) {
+            this.initCache(categoryRepository::getCategoryIdList, categoryRepository::updateCategoryById);
+        }
         log.info("结束缓存分类");
         // 标签 tag
         log.info("开始缓存标签");
-        this.initCache(tagRepository::getTagIdList, tagRepository::updateTagById);
+        if (tagRepository != null) {
+            this.initCache(tagRepository::getTagIdList, tagRepository::updateTagById);
+        }
         log.info("结束缓存标签");
         // 作者 author
         log.info("开始缓存作者");
-        this.initCache(userRepository::getUserIdList, userRepository::updateUserById);
+        if (userRepository != null) {
+            this.initCache(userRepository::getUserIdList, userRepository::updateUserById);
+        }
         log.info("结束缓存作者");
         // 菜单 menu
         log.info("开始缓存菜单");
-        this.initCache(menuItemRepository::getMenuItemIdList, menuItemRepository::updateMenuItemById);
-        this.initCache(menuRepository::getMenuIdList, menuRepository::updateMenuById);
+        if (menuItemRepository != null && menuRepository != null) {
+            this.initCache(menuItemRepository::getMenuItemIdList, menuItemRepository::updateMenuItemById);
+            this.initCache(menuRepository::getMenuIdList, menuRepository::updateMenuById);
+        }
         log.info("结束缓存菜单");
         // 页面 page
         log.info("开始缓存页面");
-        this.initCache(pageRepository::getPageIdList, pageRepository::updatePageById);
+        if (pageRepository != null) {
+            this.initCache(pageRepository::getPageIdList, pageRepository::updatePageById);
+        }
         log.info("结束缓存页面");
         // 文章 post
         log.info("开始缓存文章");
-        this.initCache(postRepository::getPostIdList, postRepository::updatePostById);
+        if (postRepository != null) {
+            this.initCache(postRepository::getPostIdList, postRepository::updatePostById);
+        }
         log.info("结束缓存文章");
+
+        log.info("结束初始化缓存");
     }
 
     private void initCache(Supplier<List<Long>> getObjectIds, Consumer<Long> cacheObjectById) {

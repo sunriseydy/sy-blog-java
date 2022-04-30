@@ -24,6 +24,12 @@ public class TypechoContents implements Serializable {
 
     private static final long serialVersionUID = -38006243728566920L;
 
+    public static final String CONTENT_STATUS_PUBLISH = "publish";
+
+    public static final String CONTENT_TYPE_POST = "post";
+
+    public static final String CONTENT_TYPE_PAGE = "page";
+
     @TableId(value = "cid", type = IdType.AUTO)
     private Integer cid;
 

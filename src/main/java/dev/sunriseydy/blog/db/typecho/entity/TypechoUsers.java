@@ -51,7 +51,7 @@ public class TypechoUsers implements Serializable {
     @TableField("logged")
     private Integer logged;
 
-    @TableField("group")
+    @TableField("`group`")
     private String group;
 
     @TableField("authCode")

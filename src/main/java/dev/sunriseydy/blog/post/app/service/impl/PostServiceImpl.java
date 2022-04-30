@@ -57,7 +57,7 @@ public class PostServiceImpl implements PostService {
     public List<PostDTO> getPostList() {
         Set<String> keys = redisTemplate.keys(BlogCacheConstant.getCacheKey(BlogCacheConstant.CACHE_NAME_POSTS) + "*");
         return keys != null ? keys.stream()
-                .map(s -> postRepository.getPostById(Long.parseLong(s.replace(BlogCacheConstant.getCacheKey(BlogCacheConstant.CACHE_NAME_POSTS), ""))).clearContent())
+                .map(s -> this.getPostById(Long.parseLong(s.replace(BlogCacheConstant.getCacheKey(BlogCacheConstant.CACHE_NAME_POSTS), ""))).clearContent())
                 .sorted(Comparator.comparing(PostDTO::getDate).reversed())
                 .collect(Collectors.toList()) : Collections.emptyList();
     }

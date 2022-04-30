@@ -24,6 +24,10 @@ public class TypechoMetas implements Serializable {
 
     private static final long serialVersionUID = -3061151868110063728L;
 
+    public static final String METAS_TYPE_TAG = "tag";
+
+    public static final String METAS_TYPE_CATEGORY = "category";
+
     @TableId(value = "mid", type = IdType.AUTO)
     private Integer mid;
 
