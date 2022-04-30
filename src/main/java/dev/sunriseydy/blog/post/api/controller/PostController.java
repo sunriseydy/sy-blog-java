@@ -33,7 +33,7 @@ public class PostController {
     }
 
     @GetMapping()
-    public Result<PageVO<PostDTO>> getPostPage(@RequestParam(required = false, defaultValue = "1") int page,
+    public Result<PageVO<PostDTO>> getPostPage(@RequestParam(required = false, defaultValue = "0") int page,
                                                @RequestParam(required = false, defaultValue = "10") int pageSize) {
         return Result.ok(postService.getPostPage(page, pageSize));
     }
