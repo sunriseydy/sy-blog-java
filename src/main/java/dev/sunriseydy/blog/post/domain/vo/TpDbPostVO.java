@@ -21,7 +21,9 @@ import java.util.List;
 @NoArgsConstructor
 public class TpDbPostVO {
 
-    public static final String READ_MORE = "<!--more-->";
+    public static final String READ_MORE = "<!--more-->\n";
+
+    public static final String MARKDOWN_MARK = "<!--markdown-->";
 
     /**
      * string or null, datetime (details) The date the object was published, in the site's timezone. Context: view, edit, embed
@@ -95,6 +97,8 @@ public class TpDbPostVO {
      *
      */
     private List<Long> tags;
+
+    private String renderType;
 
     public static TpDbPostVO fromTypechoContent(TypechoContents content) {
         if (content == null) {

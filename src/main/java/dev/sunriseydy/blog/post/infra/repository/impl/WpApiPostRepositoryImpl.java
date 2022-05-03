@@ -1,9 +1,11 @@
 package dev.sunriseydy.blog.post.infra.repository.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import dev.sunriseydy.blog.category.domain.repository.CategoryRepository;
 import dev.sunriseydy.blog.common.constants.BlogCacheConstant;
 import dev.sunriseydy.blog.common.constants.BlogSourceTypeConstant;
+import dev.sunriseydy.blog.common.constants.PostRenderTypeConstant;
 import dev.sunriseydy.blog.common.constants.WpApiConstant;
 import dev.sunriseydy.blog.common.properties.SyBlogProperties;
 import dev.sunriseydy.blog.common.utils.WpApiRequestUtil;
@@ -75,7 +77,19 @@ public class WpApiPostRepositoryImpl implements PostRepository {
                 restTemplate,
                 WpApiPostVO.class);
 
-        return postVO.toPostDto();
+        PostDTO postDTO = postVO.toPostDto();
+        // 设置 featuredMediaUrl
+        if (postVO.getEmbedded() != null
+                && postVO.getEmbedded().hasNonNull("wp:featuredmedia")
+                && postVO.getEmbedded().get("wp:featuredmedia").isArray()
+                && postVO.getEmbedded().get("wp:featuredmedia").hasNonNull(0)
+                && postVO.getEmbedded().get("wp:featuredmedia").get(0).hasNonNull("source_url")) {
+            JsonNode sourceUrl = postVO.getEmbedded().get("wp:featuredmedia").get(0).get("source_url");
+            postDTO.setFeaturedMediaUrl(sourceUrl.asText());
+        }
+        // 设置渲染类型
+        postDTO.setRenderType(PostRenderTypeConstant.HTML);
+        return postDTO;
     }
 
     @Override

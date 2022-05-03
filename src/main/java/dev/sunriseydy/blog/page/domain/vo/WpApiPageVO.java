@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dev.sunriseydy.blog.common.constants.DateTimeConstant;
+import dev.sunriseydy.blog.common.constants.PostRenderTypeConstant;
 import dev.sunriseydy.blog.common.vo.WpApiRenderedVO;
 import dev.sunriseydy.blog.page.api.dto.PageDTO;
 import lombok.AllArgsConstructor;
@@ -158,6 +159,7 @@ public class WpApiPageVO implements Serializable {
             dto.setFeaturedMediaUrl(sourceUrl.asText());
 
         }
+        dto.setRenderType(PostRenderTypeConstant.HTML);
         return dto;
     }
 }

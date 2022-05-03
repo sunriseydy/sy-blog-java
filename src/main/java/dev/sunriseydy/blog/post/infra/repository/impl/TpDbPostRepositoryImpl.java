@@ -2,6 +2,7 @@ package dev.sunriseydy.blog.post.infra.repository.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import dev.sunriseydy.blog.common.constants.BlogSourceTypeConstant;
+import dev.sunriseydy.blog.common.constants.PostRenderTypeConstant;
 import dev.sunriseydy.blog.common.constants.TypechoFieldName;
 import dev.sunriseydy.blog.common.exception.CommonException;
 import dev.sunriseydy.blog.db.typecho.entity.TypechoContents;
@@ -15,6 +16,7 @@ import dev.sunriseydy.blog.post.domain.repository.PostRepository;
 import dev.sunriseydy.blog.post.domain.vo.TpDbPostVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Repository;
@@ -93,7 +95,11 @@ public class TpDbPostRepositoryImpl implements PostRepository {
             // 如果含有 read more 标签,则截取标签前的内容
             excerpt = StringUtils.substringBefore(postVO.getContentString(), TpDbPostVO.READ_MORE);
         }
-        postVO.setExcerptString(excerpt);
+        postVO.setExcerptString(RegExUtils.removeFirst(excerpt, TpDbPostVO.MARKDOWN_MARK));
+        // 设置渲染类型
+        postVO.setRenderType(postVO.getContentString().startsWith(TpDbPostVO.MARKDOWN_MARK) ? PostRenderTypeConstant.MARKDOWN : PostRenderTypeConstant.HTML);
+        // 去掉 markdown 标记
+        postVO.setContentString(RegExUtils.removeFirst(postVO.getContentString(), TpDbPostVO.MARKDOWN_MARK));
         return postVO.toPostDto();
     }
 
