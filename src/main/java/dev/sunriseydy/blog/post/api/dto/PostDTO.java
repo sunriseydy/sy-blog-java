@@ -129,6 +129,8 @@ public class PostDTO implements Serializable {
      */
     private List<TagDTO> tagsList;
 
+    private String renderType;
+
     public PostDTO clearContent() {
         this.setContentString(null);
         return this;

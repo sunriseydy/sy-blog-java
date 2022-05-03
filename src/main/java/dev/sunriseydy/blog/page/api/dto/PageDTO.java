@@ -109,4 +109,6 @@ public class PageDTO implements Serializable {
     private Long parent;
 
     private Integer menuOrder;
+
+    private String renderType;
 }
