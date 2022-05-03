@@ -88,7 +88,7 @@ public class TpDbPostRepositoryImpl implements PostRepository {
                     .collect(Collectors.toList()));
         }
         // 获取excerpt
-        String excerpt = StringUtils.substring(postVO.getContentString(), 0, 120);
+        String excerpt = postVO.getContentString();
         if (postVO.getContentString().contains(TpDbPostVO.READ_MORE)) {
             // 如果含有 read more 标签,则截取标签前的内容
             excerpt = StringUtils.substringBefore(postVO.getContentString(), TpDbPostVO.READ_MORE);
