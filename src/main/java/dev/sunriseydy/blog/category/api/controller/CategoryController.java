@@ -3,6 +3,7 @@ package dev.sunriseydy.blog.category.api.controller;
 import dev.sunriseydy.blog.category.api.dto.CategoryDTO;
 import dev.sunriseydy.blog.category.app.service.CategoryService;
 import dev.sunriseydy.blog.common.Result;
+import dev.sunriseydy.blog.common.annotion.BasicAuth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +33,7 @@ public class CategoryController {
         return Result.ok(this.categoryService.getCategoriesTree());
     }
 
+    @BasicAuth
     @PutMapping("/{id}")
     public Result<CategoryDTO> updateCategoryById(@PathVariable Long id) {
         return Result.ok(this.categoryService.updateCategoryById(id));
