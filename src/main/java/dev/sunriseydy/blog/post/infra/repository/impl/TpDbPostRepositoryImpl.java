@@ -94,6 +94,9 @@ public class TpDbPostRepositoryImpl implements PostRepository {
         if (postVO.getContentString().contains(TpDbPostVO.READ_MORE)) {
             // 如果含有 read more 标签,则截取标签前的内容
             excerpt = StringUtils.substringBefore(postVO.getContentString(), TpDbPostVO.READ_MORE);
+            postVO.setHasReadMore(Boolean.TRUE);
+            // 去掉 read more 标记
+            postVO.setContentString(RegExUtils.removeFirst(postVO.getContentString(), TpDbPostVO.READ_MORE));
         }
         postVO.setExcerptString(RegExUtils.removeFirst(excerpt, TpDbPostVO.MARKDOWN_MARK));
         // 设置渲染类型

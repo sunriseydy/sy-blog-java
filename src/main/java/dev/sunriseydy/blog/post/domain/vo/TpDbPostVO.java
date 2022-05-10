@@ -100,6 +100,8 @@ public class TpDbPostVO {
 
     private String renderType;
 
+    private Boolean hasReadMore = false;
+
     public static TpDbPostVO fromTypechoContent(TypechoContents content) {
         if (content == null) {
             return null;

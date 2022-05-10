@@ -131,6 +131,8 @@ public class PostDTO implements Serializable {
 
     private String renderType;
 
+    private Boolean hasReadMore;
+
     public PostDTO clearContent() {
         this.setContentString(null);
         return this;
