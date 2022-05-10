@@ -21,6 +21,10 @@ public interface PostService {
 
     PostDTO getPostBySlug(String slug);
 
+    PageVO<PostDTO> getPostsByCategoryId(Long id, int page, int pageSize);
+
+    PageVO<PostDTO> getPostsByTagId(Long id, int page, int pageSize);
+
     PostDTO updatePostById(Long id);
 
     void deletePostById(Long id);

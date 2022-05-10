@@ -43,6 +43,20 @@ public class PostController {
         return Result.ok(postService.getPostBySlug(slug));
     }
 
+    @GetMapping("/category")
+    public Result<PageVO<PostDTO>> getPostByCategory(@NotNull @RequestParam Long categoryId,
+                                                     @RequestParam(required = false, defaultValue = "0") int page,
+                                                     @RequestParam(required = false, defaultValue = "10") int pageSize) {
+        return Result.ok(postService.getPostsByCategoryId(categoryId, page, pageSize));
+    }
+
+    @GetMapping("/tag")
+    public Result<PageVO<PostDTO>> getPostByTag(@NotNull @RequestParam Long tagId,
+                                                @RequestParam(required = false, defaultValue = "0") int page,
+                                                @RequestParam(required = false, defaultValue = "10") int pageSize) {
+        return Result.ok(postService.getPostsByTagId(tagId, page, pageSize));
+    }
+
     @BasicAuth
     @PutMapping("/{id}")
     public Result<PostDTO> updatePostById(@NotNull @PathVariable Long id) {

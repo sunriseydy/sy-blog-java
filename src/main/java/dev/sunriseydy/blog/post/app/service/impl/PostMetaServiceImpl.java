@@ -16,6 +16,7 @@ import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -72,7 +73,7 @@ public class PostMetaServiceImpl implements PostMetaService {
     }
 
     @Override
-    public PageVO<PostMeta> getPostMetaByPage(long page, long pageSize) {
+    public PageVO<PostMeta> getPostMetasByPage(long page, long pageSize) {
         Assert.isTrue(pageSize > 0, "pageSize 必须大于 0");
         Assert.isTrue(page >= 0, "page 必须大于等于 0");
 
@@ -91,5 +92,19 @@ public class PostMetaServiceImpl implements PostMetaService {
                 .totalPages(totalPages)
                 .content(this.zSetOperations.reverseRange(from, to))
                 .build();
+    }
+
+    @Override
+    public List<PostMeta> getPostMetasByCategoryId(Long id) {
+        return this.getAllPostMetas().stream()
+                .filter(postMeta -> postMeta.getCategories().contains(id))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PostMeta> getPostMetasByTagId(Long id) {
+        return this.getAllPostMetas().stream()
+                .filter(postMeta -> postMeta.getTags().contains(id))
+                .collect(Collectors.toList());
     }
 }

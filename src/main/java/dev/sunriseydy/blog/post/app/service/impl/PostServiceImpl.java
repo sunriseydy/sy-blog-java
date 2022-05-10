@@ -2,6 +2,7 @@ package dev.sunriseydy.blog.post.app.service.impl;
 
 import dev.sunriseydy.blog.category.api.dto.CategoryDTO;
 import dev.sunriseydy.blog.category.domain.repository.CategoryRepository;
+import dev.sunriseydy.blog.common.utils.PageUtil;
 import dev.sunriseydy.blog.common.vo.PageVO;
 import dev.sunriseydy.blog.post.api.dto.PostDTO;
 import dev.sunriseydy.blog.post.api.dto.PostMeta;
@@ -64,7 +65,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PageVO<PostDTO> getPostPage(int page, int pageSize) {
-        PageVO<PostMeta> metaPage = postMetaService.getPostMetaByPage(page, pageSize);
+        PageVO<PostMeta> metaPage = postMetaService.getPostMetasByPage(page, pageSize);
 
         return PageVO.<PostDTO>builder()
                 .page(metaPage.getPage())
@@ -72,7 +73,7 @@ public class PostServiceImpl implements PostService {
                 .totalPages(metaPage.getTotalPages())
                 .total(metaPage.getTotal())
                 .content(metaPage.getContent().stream()
-                        .map(postMeta -> this.getPostById(postMeta.getId()))
+                        .map(postMeta -> this.getPostById(postMeta.getId()).clearContent())
                         .collect(Collectors.toList()))
                 .build();
     }
@@ -107,6 +108,22 @@ public class PostServiceImpl implements PostService {
     public PostDTO getPostBySlug(String slug) {
         Long id = this.postMetaService.getPostIdBySlug(slug);
         return this.getPostById(id);
+    }
+
+    @Override
+    public PageVO<PostDTO> getPostsByCategoryId(Long id, int page, int pageSize) {
+        List<PostDTO> list = this.postMetaService.getPostMetasByCategoryId(id).stream()
+                .map(postMeta -> this.getPostById(postMeta.getId()).clearContent())
+                .collect(Collectors.toList());
+        return PageUtil.doPage(page, pageSize, list);
+    }
+
+    @Override
+    public PageVO<PostDTO> getPostsByTagId(Long id, int page, int pageSize) {
+        List<PostDTO> list = this.postMetaService.getPostMetasByTagId(id).stream()
+                .map(postMeta -> this.getPostById(postMeta.getId()).clearContent())
+                .collect(Collectors.toList());
+        return PageUtil.doPage(page, pageSize, list);
     }
 
     @Override
