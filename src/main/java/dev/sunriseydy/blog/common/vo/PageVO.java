@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * @author SunriseYDY
@@ -16,13 +16,13 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class PageVO<T> {
-    private Integer page;
+    private Long page;
 
-    private Integer pageSize;
+    private Long pageSize;
 
-    private Integer totalPages;
+    private Long totalPages;
 
-    private Integer total;
+    private Long total;
 
-    private List<T> content;
+    private Collection<T> content;
 }

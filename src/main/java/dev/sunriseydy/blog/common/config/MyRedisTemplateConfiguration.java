@@ -1,6 +1,5 @@
 package dev.sunriseydy.blog.common.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -37,8 +36,8 @@ public class MyRedisTemplateConfiguration {
      */
     private final RedisSerializationContext.SerializationPair<Object> jacksonPair;
 
-    public MyRedisTemplateConfiguration(ObjectMapper objectMapper) {
-        this.jacksonSerializer = new GenericJackson2JsonRedisSerializer(objectMapper);
+    public MyRedisTemplateConfiguration() {
+        this.jacksonSerializer = new GenericJackson2JsonRedisSerializer();
         this.jacksonPair = RedisSerializationContext.SerializationPair.fromSerializer(jacksonSerializer);
     }
 

@@ -3,9 +3,10 @@ package dev.sunriseydy.blog.post.app.service.impl;
 import dev.sunriseydy.blog.category.api.dto.CategoryDTO;
 import dev.sunriseydy.blog.category.domain.repository.CategoryRepository;
 import dev.sunriseydy.blog.common.constants.BlogCacheConstant;
-import dev.sunriseydy.blog.common.utils.PageUtil;
 import dev.sunriseydy.blog.common.vo.PageVO;
 import dev.sunriseydy.blog.post.api.dto.PostDTO;
+import dev.sunriseydy.blog.post.api.dto.PostMeta;
+import dev.sunriseydy.blog.post.app.service.PostMetaService;
 import dev.sunriseydy.blog.post.app.service.PostService;
 import dev.sunriseydy.blog.post.domain.repository.PostRepository;
 import dev.sunriseydy.blog.tag.api.dto.TagDTO;
@@ -32,6 +33,8 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
 
+    private final PostMetaService postMetaService;
+
     private final RedisTemplate<String, Object> redisTemplate;
 
     private final CategoryRepository categoryRepository;
@@ -40,7 +43,8 @@ public class PostServiceImpl implements PostService {
 
     private final UserRepository userRepository;
 
-    public PostServiceImpl(CategoryRepository categoryRepository, TagRepository tagRepository, UserRepository userRepository, PostRepository postRepository, RedisTemplate<String, Object> redisTemplate) {
+    public PostServiceImpl(PostMetaService postMetaService, CategoryRepository categoryRepository, TagRepository tagRepository, UserRepository userRepository, PostRepository postRepository, RedisTemplate<String, Object> redisTemplate) {
+        this.postMetaService = postMetaService;
         this.categoryRepository = categoryRepository;
         this.tagRepository = tagRepository;
         this.userRepository = userRepository;
@@ -64,7 +68,17 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PageVO<PostDTO> getPostPage(int page, int pageSize) {
-        return PageUtil.doPage(page, pageSize, this.getPostList());
+        PageVO<PostMeta> metaPage = postMetaService.getPostMetaByPage(page, pageSize);
+
+        return PageVO.<PostDTO>builder()
+                .page(metaPage.getPage())
+                .pageSize(metaPage.getPageSize())
+                .totalPages(metaPage.getTotalPages())
+                .total(metaPage.getTotal())
+                .content(metaPage.getContent().stream()
+                        .map(postMeta -> this.getPostById(postMeta.getId()))
+                        .collect(Collectors.toList()))
+                .build();
     }
 
     @Override
