@@ -23,4 +23,6 @@ public interface PostService {
 
     void deletePostById(Long id);
 
+    void generatePostMetaCache();
+
 }

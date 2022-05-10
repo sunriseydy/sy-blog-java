@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -136,5 +137,11 @@ public class PostDTO implements Serializable {
     public PostDTO clearContent() {
         this.setContentString(null);
         return this;
+    }
+
+    public PostMeta toPostMeta() {
+        PostMeta meta = new PostMeta();
+        BeanUtils.copyProperties(this, meta);
+        return meta;
     }
 }

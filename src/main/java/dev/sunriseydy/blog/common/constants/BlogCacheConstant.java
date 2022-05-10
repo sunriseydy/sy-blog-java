@@ -22,6 +22,8 @@ public interface BlogCacheConstant {
 
     String CACHE_NAME_MENU_ITEMS = "menu-items";
 
+    String CACHE_KEY_POST_META = BlogCacheConstant.CACHE_KEY_PREFIX + "post-meta";
+
     String CACHE_KEY_PREFIX = "sy-blog:cache:";
 
     /**

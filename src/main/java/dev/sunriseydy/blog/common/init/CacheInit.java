@@ -5,6 +5,7 @@ import dev.sunriseydy.blog.common.properties.SyBlogProperties;
 import dev.sunriseydy.blog.menu.domain.repository.MenuItemRepository;
 import dev.sunriseydy.blog.menu.domain.repository.MenuRepository;
 import dev.sunriseydy.blog.page.domain.repository.PageRepository;
+import dev.sunriseydy.blog.post.app.service.PostService;
 import dev.sunriseydy.blog.post.domain.repository.PostRepository;
 import dev.sunriseydy.blog.tag.domain.repository.TagRepository;
 import dev.sunriseydy.blog.user.domain.repository.UserRepository;
@@ -49,6 +50,9 @@ public class CacheInit implements CommandLineRunner {
 
     @Autowired(required = false)
     private PostRepository postRepository;
+
+    @Autowired
+    private PostService postService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -95,6 +99,11 @@ public class CacheInit implements CommandLineRunner {
             this.initCache(postRepository::getPostIdList, postRepository::updatePostById);
         }
         log.info("结束缓存文章");
+
+        // 文章元数据 postMeta
+        log.info("开始缓存文章元数据");
+        postService.generatePostMetaCache();
+        log.info("结束缓存文章元数据");
 
         log.info("结束初始化缓存");
     }

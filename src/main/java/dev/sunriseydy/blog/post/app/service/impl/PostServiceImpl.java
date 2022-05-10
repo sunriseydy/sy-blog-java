@@ -13,6 +13,7 @@ import dev.sunriseydy.blog.tag.domain.repository.TagRepository;
 import dev.sunriseydy.blog.user.domain.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -101,5 +102,23 @@ public class PostServiceImpl implements PostService {
     @Override
     public void deletePostById(Long id) {
         postRepository.deletePostById(id);
+    }
+
+    @Override
+    public void generatePostMetaCache() {
+        // 先删掉已有的
+        this.redisTemplate.delete(BlogCacheConstant.CACHE_KEY_POST_META);
+
+        Set<String> keys = redisTemplate.keys(BlogCacheConstant.getCacheKey(BlogCacheConstant.CACHE_NAME_POSTS) + "*");
+        if (CollectionUtils.isNotEmpty(keys)) {
+            keys.stream()
+                    .map(id ->
+                            postRepository.getPostById(Long.parseLong(StringUtils.remove(id,
+                                    BlogCacheConstant.getCacheKey(BlogCacheConstant.CACHE_NAME_POSTS)))))
+                    .map(PostDTO::toPostMeta)
+                    .forEach(postMeta -> this.redisTemplate.boundZSetOps(BlogCacheConstant.CACHE_KEY_POST_META)
+                            .add(postMeta, postMeta.getDate().getTime()));
+
+        }
     }
 }
