@@ -61,7 +61,7 @@ public class PageServiceImpl implements PageService {
 
     @Override
     public PageDTO updatePageById(Long id) {
-        return this.getPageById(id);
+        return this.pageRepository.updatePageById(id);
     }
 
     @Override
