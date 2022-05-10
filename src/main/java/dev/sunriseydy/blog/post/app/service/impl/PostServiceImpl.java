@@ -2,7 +2,6 @@ package dev.sunriseydy.blog.post.app.service.impl;
 
 import dev.sunriseydy.blog.category.api.dto.CategoryDTO;
 import dev.sunriseydy.blog.category.domain.repository.CategoryRepository;
-import dev.sunriseydy.blog.common.constants.BlogCacheConstant;
 import dev.sunriseydy.blog.common.vo.PageVO;
 import dev.sunriseydy.blog.post.api.dto.PostDTO;
 import dev.sunriseydy.blog.post.api.dto.PostMeta;
@@ -17,10 +16,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -59,11 +55,11 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDTO> getPostList() {
-        Set<String> keys = redisTemplate.keys(BlogCacheConstant.getCacheKey(BlogCacheConstant.CACHE_NAME_POSTS) + "*");
-        return keys != null ? keys.stream()
-                .map(s -> this.getPostById(Long.parseLong(s.replace(BlogCacheConstant.getCacheKey(BlogCacheConstant.CACHE_NAME_POSTS), ""))).clearContent())
-                .sorted(Comparator.comparing(PostDTO::getDate).reversed())
-                .collect(Collectors.toList()) : Collections.emptyList();
+        return this.postMetaService.getAllPostMetas()
+                .stream()
+                .map(PostMeta::getId)
+                .map(this::getPostById)
+                .collect(Collectors.toList());
     }
 
     @Override
