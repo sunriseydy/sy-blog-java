@@ -108,6 +108,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public PostDTO getPostBySlug(String slug) {
+        Long id = this.postMetaService.getPostIdBySlug(slug);
+        return this.getPostById(id);
+    }
+
+    @Override
     public PostDTO updatePostById(Long id) {
         return postRepository.updatePostById(id);
     }

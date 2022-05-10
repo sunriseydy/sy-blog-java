@@ -38,6 +38,11 @@ public class PostController {
         return Result.ok(postService.getPostPage(page, pageSize));
     }
 
+    @GetMapping("/slug")
+    public Result<PostDTO> getPostBySlug(@NotNull @RequestParam String slug) {
+        return Result.ok(postService.getPostBySlug(slug));
+    }
+
     @BasicAuth
     @PutMapping("/{id}")
     public Result<PostDTO> updatePostById(@NotNull @PathVariable Long id) {
