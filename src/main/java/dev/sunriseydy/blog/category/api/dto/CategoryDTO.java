@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author SunriseYDY
@@ -68,4 +69,8 @@ public class CategoryDTO implements Serializable {
      * Context: view, edit
      */
     private Long parent;
+
+    private String fullSlug;
+
+    List<CategoryDTO> children;
 }
