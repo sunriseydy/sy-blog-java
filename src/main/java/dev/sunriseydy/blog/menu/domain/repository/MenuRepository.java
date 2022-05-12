@@ -1,5 +1,6 @@
 package dev.sunriseydy.blog.menu.domain.repository;
 
+import dev.sunriseydy.blog.menu.api.dto.Menu;
 import dev.sunriseydy.blog.menu.api.dto.MenuDTO;
 import dev.sunriseydy.blog.common.constants.BlogCacheConstant;
 import org.springframework.cache.annotation.CacheConfig;
@@ -25,4 +26,7 @@ public interface MenuRepository {
 
     @CacheEvict(key = "#id")
     void deleteMenuById(Long id);
+
+    @Cacheable(key = "#name")
+    List<Menu> getMenusByName(String name);
 }

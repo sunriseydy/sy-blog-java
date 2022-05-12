@@ -6,6 +6,7 @@ import dev.sunriseydy.blog.common.constants.WpApiConstant;
 import dev.sunriseydy.blog.common.properties.SyBlogProperties;
 import dev.sunriseydy.blog.common.utils.WpApiRequestUtil;
 import dev.sunriseydy.blog.common.vo.WpApiGlobalRequestParamVO;
+import dev.sunriseydy.blog.menu.api.dto.Menu;
 import dev.sunriseydy.blog.menu.api.dto.MenuDTO;
 import dev.sunriseydy.blog.menu.domain.repository.MenuRepository;
 import dev.sunriseydy.blog.menu.domain.vo.WpApiMenuVO;
@@ -66,5 +67,10 @@ public class WpApiMenuRepositoryImpl implements MenuRepository {
     @Override
     public void deleteMenuById(Long id) {
         log.info("delete that menu:{}", id);
+    }
+
+    @Override
+    public List<Menu> getMenusByName(String name) {
+        return null;
     }
 }
