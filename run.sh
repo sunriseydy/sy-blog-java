@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
+set -o errexit # 只要发生错误，就终止执行
+set -o pipefail # 只要一个子命令失败，整个管道命令就失败，脚本就会终止执行
 
 source .local.env
+
+git checkout master
+git fetch
+git reset --hard origin/master
 
 mvn -DskipTests=true clean package
 
