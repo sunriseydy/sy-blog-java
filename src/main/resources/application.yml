@@ -7,10 +7,10 @@ spring:
       primary: typecho
       strict: true
       datasource:
-        wordpress:
-          url: ${SPRING_WORDPRESS_DATASOURCE_URL:jdbc:mysql://localhost:3306/blog?useUnicode=true&characterEncoding=utf-8&useSSL=false&useTimezone=true&serverTimezone=Asia/Shanghai}
-          username: ${SPRING_WORDPRESS_DATASOURCE_USERNAME:root}
-          password: ${SPRING_WORDPRESS_DATASOURCE_PASSWORD:root}
+#        wordpress:
+#          url: ${SPRING_WORDPRESS_DATASOURCE_URL:jdbc:mysql://localhost:3306/blog?useUnicode=true&characterEncoding=utf-8&useSSL=false&useTimezone=true&serverTimezone=Asia/Shanghai}
+#          username: ${SPRING_WORDPRESS_DATASOURCE_USERNAME:root}
+#          password: ${SPRING_WORDPRESS_DATASOURCE_PASSWORD:root}
         typecho:
           url: ${SPRING_TYPECHO_DATASOURCE_URL:jdbc:mysql://localhost:3306/typecho?useUnicode=true&characterEncoding=utf-8&useSSL=false&useTimezone=true&serverTimezone=Asia/Shanghai}
           username: ${SPRING_TYPECHO_DATASOURCE_USERNAME:root}
