@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -34,14 +35,19 @@ public class CategoryServiceImpl implements CategoryService {
         List<CategoryDTO> categories = this.redisTemplate.opsForValue().multiGet(
                 Objects.requireNonNull(this.redisTemplate.keys(BlogCacheConstant.getCacheKey(BlogCacheConstant.CACHE_NAME_CATEGORIES) + "*"))
         );
-        categories.forEach(categoryDTO -> categoryDTO.setFullSlug(this.getParentSlug(categories, categoryDTO.getParent()) + categoryDTO.getSlug()));
-        return categories;
+        return categories.stream()
+                .sorted(Comparator.comparing(CategoryDTO::getCount).reversed())
+                .peek(categoryDTO -> categoryDTO.setFullSlug(this.getParentSlug(categories, categoryDTO.getParent()) + categoryDTO.getSlug()))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<CategoryDTO> getCategoriesTree() {
         List<CategoryDTO> categories = this.getCategories();
-        return this.getChildrenCategories(categories, 0L);
+        return this.getChildrenCategories(categories, 0L)
+                .stream()
+                .sorted(Comparator.comparing(CategoryDTO::getId))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -57,6 +63,7 @@ public class CategoryServiceImpl implements CategoryService {
     private List<CategoryDTO> getChildrenCategories(List<CategoryDTO> categories, Long parentId) {
         return categories.stream()
                 .filter(categoryDTO -> parentId.equals(categoryDTO.getParent()))
+                .sorted(Comparator.comparing(CategoryDTO::getCount).reversed())
                 .peek(categoryDTO -> categoryDTO.setChildren(this.getChildrenCategories(categories, categoryDTO.getId())))
                 .collect(Collectors.toList());
     }
