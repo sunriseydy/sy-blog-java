@@ -3,7 +3,7 @@ set -o errexit # 只要发生错误，就终止执行
 set -o pipefail # 只要一个子命令失败，整个管道命令就失败，脚本就会终止执行
 
 export SPRING_PROFILES_ACTIVE=default
-source .local.env
+source .env.local
 
 if [ "$1" != "-l" ]; then
   git checkout master
