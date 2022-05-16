@@ -3,8 +3,11 @@ spring:
     name: sy-blog-java
   datasource:
     dynamic:
+      # 是否启用多数据源
       enabled: true
+      # 默认的数据源
       primary: typecho
+      # 是否启用严格模式,默认不启动. 严格模式下未匹配到数据源直接报错, 非严格模式下则使用默认数据源primary所设置的数据源
       strict: true
       datasource:
 #        wordpress:
@@ -85,11 +88,16 @@ springdoc:
     use-root-path: true
 sy:
   blog:
+    # 数据来源类型
     source-type: ${BLOG_SOURCE_TYPE:tp-db}
+    # API 类型数据源的 API Host
     rest-api-host: ${WP_REST_API_HOST:https://xn--ghq2ewa7745eca.xn--6qq986b3xl}
+    # 用户名，用于访问本应用未公开的接口以及未公开的数据源 API
     username: ${WP_USERNAME:}
+    # 密码，用于访问本应用未公开的接口以及未公开的数据源 API
     password: ${WP_PASSWORD:}
-    init-cache: ${BLOG_INIT_CACHE:false}
+    # 是否在启动时自动初始化缓存，默认为 true
+    init-cache: ${BLOG_INIT_CACHE:true}
 
 logging:
   level:

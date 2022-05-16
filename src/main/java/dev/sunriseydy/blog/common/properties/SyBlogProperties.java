@@ -36,18 +36,18 @@ public class SyBlogProperties {
     private String sourceType = BlogSourceTypeConstant.SOURCE_TYPE_WP_API;
 
     /**
-     * rest api host, see <a href="https://developer.wordpress.org/rest-api/">WordPress REST API Handbook</a>
+     * API 类型数据源的 API Host
      */
     @URL
     private String restApiHost;
 
     /**
-     * wordpress username
+     * 用户名，用于访问本应用未公开的接口以及未公开的数据源 API
      */
     private String username;
 
     /**
-     * wordpress password
+     * 密码，用于访问本应用未公开的接口以及未公开的数据源 API
      */
     private String password;
 
