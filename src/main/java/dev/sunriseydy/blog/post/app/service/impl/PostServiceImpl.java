@@ -128,7 +128,21 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDTO updatePostById(Long id) {
-        return postRepository.updatePostById(id);
+        // 更新 post
+        PostDTO postDTO = postRepository.updatePostById(id);
+        // 更新 post meta
+        postMetaService.updatePostMetaCache(postDTO);
+        // 更新 category
+        if (CollectionUtils.isNotEmpty(postDTO.getCategories())) {
+            postDTO.getCategories().forEach(categoryRepository::updateCategoryById);
+        }
+        // 更新 tag
+        if (CollectionUtils.isNotEmpty(postDTO.getTags())) {
+            postDTO.getTags().forEach(tagRepository::updateTagById);
+        }
+        // 更新 user
+        userRepository.updateUserById(postDTO.getAuthor());
+        return postDTO;
     }
 
     @Override

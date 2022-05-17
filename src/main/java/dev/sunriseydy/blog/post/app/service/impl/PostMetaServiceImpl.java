@@ -58,6 +58,12 @@ public class PostMetaServiceImpl implements PostMetaService {
     }
 
     @Override
+    public void updatePostMetaCache(PostDTO postDTO) {
+        PostMeta postMeta = postDTO.toPostMeta();
+        this.zSetOperations.add(postMeta, postMeta.getDate().getTime());
+    }
+
+    @Override
     public Set<PostMeta> getAllPostMetas() {
         return this.zSetOperations.reverseRangeByScore(0, System.currentTimeMillis());
     }

@@ -1,6 +1,7 @@
 package dev.sunriseydy.blog.post.app.service;
 
 import dev.sunriseydy.blog.common.vo.PageVO;
+import dev.sunriseydy.blog.post.api.dto.PostDTO;
 import dev.sunriseydy.blog.post.api.dto.PostMeta;
 
 import java.util.List;
@@ -13,6 +14,8 @@ import java.util.Set;
 public interface PostMetaService {
 
     void generatePostMetaCache();
+
+    void updatePostMetaCache(PostDTO postDTO);
 
     Set<PostMeta> getAllPostMetas();
 
