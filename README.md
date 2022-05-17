@@ -54,7 +54,7 @@ swagger ui 地址为 `/swagger-ui/index.html`
 `sy-blog-java` 目前支持的数据来源类型有：
 
 |类型|含义|描述|
-|-|-|-|
+|---|---|---|
 |`wp-api`|WordPress API|从 WordPress 的 API 获取数据。|
 |`wp-db`|WordPress Database|从 WordPress 的数据库中获取数据。 ***暂未实现， TODO***|
 |`tp-api`|Typecho API|从 Typecho 的 API 获取数据。 ***由于 Typecho 暂时没有官方 API ，因此该功能暂未实现***|
