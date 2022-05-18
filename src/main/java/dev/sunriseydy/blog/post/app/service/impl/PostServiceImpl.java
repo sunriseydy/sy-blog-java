@@ -131,7 +131,7 @@ public class PostServiceImpl implements PostService {
         List<PostDTO> list = this.getPostList()
                 .stream()
                 .filter(postDTO -> postDTO.getContentString().toLowerCase().contains(search.toLowerCase()))
-                .map(postDTO -> this.getPostById(postDTO.getId()))
+                .map(postDTO -> this.getPostById(postDTO.getId()).clearContent())
                 .collect(Collectors.toList());
         return PageUtil.doPage(page, pageSize, list);
     }
