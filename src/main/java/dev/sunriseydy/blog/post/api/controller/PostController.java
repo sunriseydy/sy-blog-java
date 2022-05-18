@@ -57,6 +57,13 @@ public class PostController {
         return Result.ok(postService.getPostsByTagId(tagId, page, pageSize));
     }
 
+    @GetMapping("/search")
+    public Result<PageVO<PostDTO>> searchPosts(@RequestParam String search,
+                                               @RequestParam(required = false, defaultValue = "0") int page,
+                                               @RequestParam(required = false, defaultValue = "10") int pageSize) {
+        return Result.ok(postService.searchPosts(search, page, pageSize));
+    }
+
     @BasicAuth
     @PutMapping("/{id}")
     public Result<PostDTO> updatePostById(@NotNull @PathVariable Long id) {

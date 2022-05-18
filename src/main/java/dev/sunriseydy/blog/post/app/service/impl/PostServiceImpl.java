@@ -59,7 +59,7 @@ public class PostServiceImpl implements PostService {
         return this.postMetaService.getAllPostMetas()
                 .stream()
                 .map(PostMeta::getId)
-                .map(this::getPostById)
+                .map(postRepository::getPostById)
                 .collect(Collectors.toList());
     }
 
@@ -122,6 +122,16 @@ public class PostServiceImpl implements PostService {
     public PageVO<PostDTO> getPostsByTagId(Long id, int page, int pageSize) {
         List<PostDTO> list = this.postMetaService.getPostMetasByTagId(id).stream()
                 .map(postMeta -> this.getPostById(postMeta.getId()).clearContent())
+                .collect(Collectors.toList());
+        return PageUtil.doPage(page, pageSize, list);
+    }
+
+    @Override
+    public PageVO<PostDTO> searchPosts(String search, int page, int pageSize) {
+        List<PostDTO> list = this.getPostList()
+                .stream()
+                .filter(postDTO -> postDTO.getContentString().toLowerCase().contains(search.toLowerCase()))
+                .map(postDTO -> this.getPostById(postDTO.getId()))
                 .collect(Collectors.toList());
         return PageUtil.doPage(page, pageSize, list);
     }
