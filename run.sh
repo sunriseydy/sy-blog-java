@@ -11,8 +11,17 @@ if [ "$1" != "-l" ]; then
   mvn -DskipTests=true clean package
 fi
 
+SERVICE_NAME=sy-blog-java-0.0.1-SNAPSHOT
+
+pid=$(jps -l | grep $SERVICE_NAME | awk '{print $1}' || true)
+echo $pid
+if [  -n  "$pid"  ];  then
+    kill $pid;
+fi
+sleep 10
+
 if [ "$SPRING_PROFILES_ACTIVE" == "default" ]; then
-  java -jar -Dspring.profiles.active=$SPRING_PROFILES_ACTIVE target/sy-blog-java-0.0.1-SNAPSHOT.jar
+  java -jar -Dspring.profiles.active=$SPRING_PROFILES_ACTIVE target/$SERVICE_NAME.jar
 else
-  nohup java -jar -Dspring.profiles.active=$SPRING_PROFILES_ACTIVE target/sy-blog-java-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 &
+  nohup java -jar -Dspring.profiles.active=$SPRING_PROFILES_ACTIVE target/$SERVICE_NAME.jar > /dev/null 2>&1 &
 fi
