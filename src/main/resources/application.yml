@@ -69,6 +69,7 @@ server:
     direct-buffers: true
     # HTTP POST请求最大的大小。默认0，无限制，可设置10M
     max-http-post-size: 0
+  forward-headers-strategy: native
 
 mybatis:
   mapper-locations:
